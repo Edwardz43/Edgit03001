@@ -1,0 +1,67 @@
+package tw.org.iii.ed;
+
+import javax.swing.JOptionPane;
+
+public class Class312_04 {
+
+	public static void main(String[] args) {
+		int n = 0;
+		//1. Create Answer
+		String answer = createAnswer(n);
+		//System.out.println(answer);
+		
+		//2. Start
+		boolean isWinner = false;
+		for(int i=0; i<10; i++){
+			//2-1. input a number string
+			String guess = JOptionPane.showInputDialog("猜"+n+"個數字:");
+			
+			//2-2. compare string =>result
+			String result = checkAB(answer , guess);
+			JOptionPane.showMessageDialog(null, result);
+			if(result.equals(n+"A0B")){
+				//2-3. winner => break
+				isWinner = true;
+				break;
+			}
+			//2-4. repeat 10 times => loser
+			
+		}
+		// show ......../.........
+		if(isWinner){
+			JOptionPane.showMessageDialog(null, "Winner !");
+		}else{
+			JOptionPane.showMessageDialog(null, "Lose...,Answer is "+answer);
+		}
+	}
+	// method: checkAB
+	static String checkAB(String a, String g){
+		int A, B; A = B =0;
+		for (int i =0 ; i < g.length(); i++){
+			if(g.charAt(i) == a.charAt(i) ){
+				A++;
+			}else if(a.indexOf(g.charAt(i))>=0){
+				B++;
+			}
+		}
+		return A + "A" + B + "B";
+	}
+	
+	// method: create answer
+	static String createAnswer(int number){
+		boolean[] check = new boolean[10];
+		int[] poker = new int[number];
+		int temp;
+		for(int i=0;i<poker.length;i++){
+			do{
+				temp = (int)(Math.random()*10);
+			}while(check[temp]);
+			
+			poker[i] = temp;
+			check[temp]=true;
+		}
+		String ret = "";
+		for(int v :poker) ret += v;
+		return ret;
+	} 
+}
