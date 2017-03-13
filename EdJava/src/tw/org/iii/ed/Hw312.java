@@ -22,7 +22,6 @@ public class Hw312 {
 					checkChar++;
 				}
 			}
-			//System.out.print(checkChar);
 			
 			//1-1-2 判斷格式正確?
 			if(checkChar == 0 && password.length()>=6 && password.length()<=20){
