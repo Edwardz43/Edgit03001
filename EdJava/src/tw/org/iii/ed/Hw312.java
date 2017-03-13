@@ -9,22 +9,24 @@ public class Hw312 {
 		// 1. 輸入密碼
 		String password="";
 		int hist=0;
-		String limit = new String("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$_*%?^");
+		//String limit = new String("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$_*%?^");
 		
 		// 1-1 測試輸入正確?
 		for(;;){
 			password = JOptionPane.showInputDialog("請輸入密碼:\n(6~20碼,字元限制a-z, A-Z, 0-9, 或$_*%?^等)");
 			
 			//1-1-1檢查輸入字元正確?
-			int checkChar = 0;
-			for(int i=0;i<password.length();i++){
-				if(limit.indexOf(password.charAt(i))==-1){  //用限制的字元去檢查輸入的密碼  只要不符合 checkChar就會++
-					checkChar++;
-				}
-			}
+//			int checkChar = 0;
+//			for(int i=0;i<password.length();i++){
+//				if(limit.indexOf(password.charAt(i))==-1){  //用限制的字元去檢查輸入的密碼  只要不符合 checkChar就會++
+//					checkChar++;
+//				}
+//			}
 			
 			//1-1-2 判斷格式正確?
-			if(checkChar == 0 && password.length()>=6 && password.length()<=20){
+			//if(checkChar == 0 && password.length()>=6 && password.length()<=20){
+			
+			if(password.matches("[0-9a-zA-Z$_?^%*]{6,20}")){ //mstches 強大的API!	 上面幾行都被取代了....
 				break;
 			}
 			JOptionPane.showMessageDialog(null, "格式錯誤!\n請輸入6~20碼,字元限制a-z, A-Z, 0-9, 或$_*%?^");
