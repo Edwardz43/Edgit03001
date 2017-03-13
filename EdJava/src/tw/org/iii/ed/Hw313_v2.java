@@ -6,7 +6,8 @@ public class Hw313_v2 {
 	
 	static boolean setPw(String password){
 		String limit = new String("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$_*%?^");
-		// 1-1 測試輸入正確?
+		// 1-1 測試輸入正確? 
+		//    預設3次  失敗就結束程式
 		for(int j =0;j<3;j++){
 			
 			//1-1-1檢查輸入字元正確?
@@ -18,7 +19,7 @@ public class Hw313_v2 {
 			}
 			
 			//1-1-2 判斷格式正確?
-			System.out.println(checkChar);
+			//System.out.println(checkChar); debug用的
 			if(checkChar == password.length() && password.length()>=6 && password.length()<=20){
 				return true;
 			}
@@ -28,15 +29,18 @@ public class Hw313_v2 {
 	}
 	
 	static boolean checkPw(String password){
+		//2-1 設定失敗次數  預設3次
 		int hist=0;
 		for(int i=0;i<3;i++){
+			
+			//2-2 檢查密碼 
 			String checkPw = JOptionPane.showInputDialog("確認密碼,請再次輸入:\n剩餘輸入次數:"+(3-hist));
 			hist ++;  
 			if(checkPw.equals(password)){
-				return true;
+				return true; //正確 => 回傳 true
 			}
 		}
-		return false;
+		return false;  //失敗3次  => 回傳false
 	}
 	
 	public static void main(String[] args) {
@@ -53,10 +57,12 @@ public class Hw313_v2 {
 			
 			// 3.ending 正確/錯誤
 			if(check){
-				JOptionPane.showMessageDialog(null, "密碼正確,恭喜您儲存成功!");
+				JOptionPane.showMessageDialog(null, "密碼正確,恭喜您設定成功!");
 			}else{
 				JOptionPane.showMessageDialog(null, "操作終止!若有疑問,請洽服務人員!");
 			}
+		}else{
+			JOptionPane.showMessageDialog(null, "操作終止!若有疑問,請洽服務人員!");
 		}
 	}
 }
