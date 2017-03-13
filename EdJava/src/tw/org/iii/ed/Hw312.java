@@ -7,7 +7,6 @@ public class Hw312 {
 	public static void main(String[] args) {
 		// Hw: password , 6~20, a-z A-Z 0-9 $_*%?^
 		// 1. 輸入密碼
-		
 		String password="";
 		int hist=0;
 		String limit = new String("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$_*%?^");
@@ -19,7 +18,7 @@ public class Hw312 {
 			//1-1-1檢查輸入字元正確?
 			int checkChar = 0;
 			for(int i=0;i<password.length();i++){
-				if(limit.indexOf(password.charAt(i))==-1){
+				if(limit.indexOf(password.charAt(i))==-1){  //用限制的字元去檢查輸入的密碼  只要不符合 checkChar就會++
 					checkChar++;
 				}
 			}
@@ -33,7 +32,7 @@ public class Hw312 {
 		}
 			
 		// 2.確認密碼
-		boolean check =false;
+		boolean check = false;
 		for(int i=0;i<3;i++){
 			String checkPw = JOptionPane.showInputDialog("確認密碼,請再次輸入:\n剩餘輸入次數:"+(3-hist));
 			hist ++;  
