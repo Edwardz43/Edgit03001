@@ -44,7 +44,8 @@ public class Hw312_numToCheck {
 		 *因為數字字元的Unicode碼是從48開始，所以-48後才會顯示出想要的數字
 		 */
 		}
-		System.out.println(convert);
+		System.out.println(convert);//測試用
+		
 		//把拼貼成果丟去檢查
 		String result=setZero(convert);
 		
