@@ -3,7 +3,7 @@ package tw.org.iii.ed;
 import javax.swing.JOptionPane;
 
 public class Hw312_numToCheck {
-	
+
 	//中文的奧妙 有時零要省略  有時又不能省
 	//所以用最原始的方法對付它=>手動更新例外
 	static String setZero(String convert){//輸入字串拼貼的結果  然後抓出不合中文語法的  
@@ -25,6 +25,7 @@ public class Hw312_numToCheck {
     }	
 	
 	public static void main(String[] args) {
+		try{
 		String in =JOptionPane.showInputDialog("請輸入金額:");
 		System.out.println(in);//測試用
 		
@@ -52,6 +53,9 @@ public class Hw312_numToCheck {
 		
 		//成品出爐!
 		JOptionPane.showMessageDialog(null, "您輸入的金額為 :\n"+result+"正");
+		}catch(Exception e){
+			JOptionPane.showMessageDialog(null,"輸入錯誤,程式即將終止\n請重新執行程式!");
+		}
 	}
-
+	
 }
