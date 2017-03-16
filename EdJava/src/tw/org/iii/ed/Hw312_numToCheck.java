@@ -4,15 +4,17 @@ import javax.swing.JOptionPane;
 
 public class Hw312_numToCheck {
 	
-	//中文的奧妙 用最原始的方法對付它=>手動更新例外
-	static String zeroClear(String convert){  
+	//中文的奧妙 有時零要省略  有時又不能省
+	//所以用最原始的方法對付它=>手動更新例外
+	static String setZero(String convert){  
         String[] zero = {"零拾","零佰","零仟"}; 
         String result = convert; 
         
         for (int i = 0;i < zero.length ;i++ )  
         {  
-            result = result.replace(zero[i], "零");  
-        }  
+            result = result.replace(zero[i], "零");//replace 顧名思義 就是取代  
+        }
+        //還有很多狀況  要自己跑測試來抓
         result = result.replace("零零零零","");  
         result = result.replace("零零零","零");  
         result = result.replace("零零","零");  
@@ -35,7 +37,7 @@ public class Hw312_numToCheck {
 			int d = in.length()-i-1;
 			convert +=chNumber[in.charAt(i)-48]+decimal[d];	//因為數字字元的ascii碼是從48開始，所以-48後才會顯示出想要的數字
 		}
-		String result=zeroClear(convert);
+		String result=setZero(convert);
 		JOptionPane.showMessageDialog(null, "您輸入的金額為 :\n"+result+"正");
 	}
 
