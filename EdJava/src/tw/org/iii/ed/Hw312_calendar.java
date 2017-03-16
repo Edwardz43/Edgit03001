@@ -29,7 +29,8 @@ public class Hw312_calendar {
 			Y=Y-1;
 			M=12;
 		}
-		int W =(1 + (int)(2.6*M -0.2)+5*(Y%4)+3*Y+5*(C%4))%7; //就套公式  數字要檢查清楚 公式正確第一關就過了!
+		int W =(1 + (int)(2.6*M -0.2)+5*(Y%4)+3*Y+5*(C%4))%7; 
+		//就套公式  數字要檢查清楚 公式正確第一關就過了!
 		return W;
 	}
 
@@ -45,7 +46,7 @@ public class Hw312_calendar {
 			break;
 		//2.1 判斷平/閏年
 		case 2:
-			if(learyear(y)){
+			if(leapYear(y)){
 				d = 29; 
 			}else{
 				d = 28;
@@ -56,8 +57,8 @@ public class Hw312_calendar {
 	
 	//2.1 判斷平/閏年
 	//禮拜六上的內容  直接COPY來用吧!
-	static boolean learyear(int year){
-		boolean learyear = true;
+	static boolean leapYear(int year){
+		boolean leap = true;
 		if(year % 4 ==0){
 			if(year % 100 == 0){
 				if(year % 400 == 0){
