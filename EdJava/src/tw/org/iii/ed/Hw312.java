@@ -41,6 +41,8 @@ public class Hw312 {
 				JOptionPane.showMessageDialog(null, "密碼正確,恭喜您儲存成功!");
 				check = true;
 				break;
+			}else{
+				JOptionPane.showMessageDialog(null, "輸入錯誤! 請確認後重新輸入");
 			}
 		}	
 					

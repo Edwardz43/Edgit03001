@@ -26,33 +26,36 @@ public class Hw312_numToCheck {
 	
 	public static void main(String[] args) {
 		try{
-		String in =JOptionPane.showInputDialog("請輸入金額:");
-		System.out.println(in);//測試用
-		
-		//先建立字串拼貼需要的素材
-		String[] chNumber = {"零","壹","貳","参","肆","伍","陸","柒","捌","玖"};
-		String[] decimal = {"圓","拾","佰","仟","萬","拾","佰","仟","億","拾","佰","仟"
-						    ,"兆","拾","佰","仟"};
-		
-		//用字串累加的概念來玩  先建立一個空的字串
-		String convert = "";
-		
-		//把輸入的字串(in)轉成中文字
-		for(int i=0;i<in.length();i++){
-			int d = in.length()-i-1;
-			convert +=chNumber[in.codePointAt(i)-48]+decimal[d];	
-		/*將char手動轉成int 當作chNumber的索引值  codePointAt會輸出該字元的Unicode
-		 *因為數字字元的Unicode碼是從48開始，所以-48後才會顯示出想要的數字
-		 */
-		}
-		System.out.println(convert);//測試用
-		
-		//把拼貼成果丟去檢查
-		String result=setZero(convert);
-		
-		
-		//成品出爐!
-		JOptionPane.showMessageDialog(null, "您輸入的金額為 :\n"+result+"正");
+			String in =JOptionPane.showInputDialog("請輸入金額:");
+			System.out.println(in);//測試用
+			
+			//先建立字串拼貼需要的素材
+			String[] chNumber = {"零","壹","貳","参","肆","伍","陸","柒","捌","玖"};
+			String[] decimal = {"圓","拾","佰","仟","萬","拾","佰","仟","億","拾","佰","仟"
+							    ,"兆","拾","佰","仟"};
+			
+			//用字串累加的概念來玩  先建立一個空的字串
+			String convert = "";
+			
+			//把輸入的字串(in)轉成中文字
+			for(int i=0;i<in.length();i++){
+				int d = in.length()-i-1;
+				convert +=chNumber[in.codePointAt(i)-48]+decimal[d];	
+			/*將char手動轉成int 當作chNumber的索引值  codePointAt會輸出該字元的Unicode
+			 *因為數字字元的Unicode碼是從48開始，所以-48後才會顯示出想要的數字
+			 *ps:codePointAt這個api的功能  和猜數字用到的chrarAt功能類似 兩個輸出結果會一樣
+			 */
+			}
+			System.out.println(convert);//測試用
+			
+			//把拼貼成果丟去檢查
+			String result=setZero(convert);
+			
+			
+			//成品出爐!
+			JOptionPane.showMessageDialog(null, "您輸入的金額為 :\n"+result+"正");
+			
+		//輸入數字以外的  就終止程式	
 		}catch(Exception e){
 			JOptionPane.showMessageDialog(null,"輸入錯誤,程式即將終止\n請重新執行程式!");
 		}
