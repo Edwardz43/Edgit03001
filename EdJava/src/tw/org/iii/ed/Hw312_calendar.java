@@ -105,9 +105,10 @@ public class Hw312_calendar {
 	
 	// 經過修改  main方法縮短很多   增加閱讀性
 	public static void main(String[] args) {
-		// 3/15 修改輸入模式   年分和月分開  更清楚   介面改成 JOP
-		
-		
+		// 3/16加入try&catch (感謝仲威指導!)
+		try{
+
+			// 3/15 修改輸入模式   年分和月分開  更清楚   介面改成 JOP
 		// 3/15 加入一個檢查輸入的機制
 		int year=0;
 		int month=0;
@@ -141,7 +142,7 @@ public class Hw312_calendar {
 				}
 			}
 		}while(!check);
-		
+	
 		
 		
 		//1. 利用公式找出每月的第一天
@@ -161,6 +162,8 @@ public class Hw312_calendar {
 		
 		//3. 產生月曆 
 		result(w,d);
-
+		}catch(Exception e){
+			JOptionPane.showMessageDialog(null,"程式終止!\n請重新啟動" );
+		}
 	}
 }
