@@ -39,9 +39,10 @@ public class Hw312_numToCheck {
 		//把輸入的字串(in)轉成中文字
 		for(int i=0;i<in.length();i++){
 			int d = in.length()-i-1;
-			convert +=chNumber[in.charAt(i)-48]+decimal[d];	
-			                //將char手動轉成int 當作chNumber的索引值
-							//因為數字字元的ascii碼是從48開始，所以-48後才會顯示出想要的數字
+			convert +=chNumber[in.codePointAt(i)-48]+decimal[d];	
+		/*將char手動轉成int 當作chNumber的索引值  codePointAt會輸出該字元的Unicode
+		 *因為數字字元的Unicode碼是從48開始，所以-48後才會顯示出想要的數字
+		 */
 		}
 		
 		//把拼貼成果丟去檢查
