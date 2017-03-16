@@ -7,6 +7,7 @@ public class Hw313_v2 {
 	 * 3/15 修改BUG :
 	 * 第一次輸入錯誤  再輸入正確密碼 
 	 * 但密碼卻停在第一次沒有儲存第二次正確的密碼
+	 * 3/16 加入try&catch 解決JOP點到取消的狀況
 	*/
 	
 	static String setPw(){ //改成回傳String
@@ -18,7 +19,7 @@ public class Hw313_v2 {
 			String password = JOptionPane.showInputDialog("請輸入密碼:\n(6~20碼,字元限制a-z, A-Z, 0-9, 或$_*%?^等)");
 			int checkChar = 0;
 			for(int i=0;i<password.length();i++){
-				if(limit.indexOf(password.charAt(i))!=-1){  //用限制的字元去檢查輸入的密碼  只要不符合 checkChar就會++
+				if(limit.indexOf(password.charAt(i))!=-1){  //用限制的字元去檢查輸入的密碼  只要通過測試 checkChar就會++
 					checkChar++;
 				}
 			}
@@ -51,6 +52,7 @@ public class Hw313_v2 {
 	}
 	
 	public static void main(String[] args) {
+		try{
 		// Hw: password , 6~20, a-z A-Z 0-9 $_*%?^
 		// 1. 輸入密碼
 		String password ="";
@@ -70,6 +72,9 @@ public class Hw313_v2 {
 			}
 		}else{
 			JOptionPane.showMessageDialog(null, "操作終止!若有疑問,請洽服務人員!");
+		}
+		}catch(Exception e){
+			JOptionPane.showMessageDialog(null, "【系統即將終止】\n請稍後重試!");
 		}
 	}
 }
