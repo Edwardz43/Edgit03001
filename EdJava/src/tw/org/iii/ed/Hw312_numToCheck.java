@@ -19,7 +19,7 @@ public class Hw312_numToCheck {
         convert = convert.replace("零零","零");  
         convert = convert.replace("零萬","萬");  
         convert = convert.replace("零圓","圓");
-        convert = convert.replace("億萬","億");
+        convert = convert.replace("億萬","億零");
         convert = convert.replace("零億","億");
         return convert;  
     }	
@@ -44,7 +44,7 @@ public class Hw312_numToCheck {
 		 *因為數字字元的Unicode碼是從48開始，所以-48後才會顯示出想要的數字
 		 */
 		}
-		
+		System.out.println(convert);
 		//把拼貼成果丟去檢查
 		String result=setZero(convert);
 		
