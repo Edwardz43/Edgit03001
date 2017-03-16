@@ -7,7 +7,7 @@ public class Hw313_v2 {
 	 * 3/15 修改BUG :
 	 * 第一次輸入錯誤  再輸入正確密碼 
 	 * 但密碼卻停在第一次沒有儲存第二次正確的密碼
-	 * 3/16 加入try&catch 解決JOP點到取消的狀況
+	 * 3/16 加入try&catch 解決JOP點到取消的狀況(感謝仲威指導!)
 	*/
 	
 	static String setPw(){ //改成回傳String
@@ -53,26 +53,28 @@ public class Hw313_v2 {
 	
 	public static void main(String[] args) {
 		try{
-		// Hw: password , 6~20, a-z A-Z 0-9 $_*%?^
-		// 1. 輸入密碼
-		String password ="";
-		password = setPw();
-		
-		//多加一個判斷  如果回傳的不是ban 就繼續下一個動作  若回傳ban  表示輸入3次皆失敗  程式直接結束
-		if(password!="ban"){
-			// 2.確認密碼
-			boolean check = false;
-			check = checkPw(password);
+			// Hw: password , 6~20, a-z A-Z 0-9 $_*%?^
+			// 1. 輸入密碼
+			String password ="";
+			password = setPw();
 			
-			// 3.ending 正確/錯誤
-			if(check){
-				JOptionPane.showMessageDialog(null, "密碼正確,恭喜您設定成功!");
+			//多加一個判斷  如果回傳的不是ban 就繼續下一個動作  若回傳ban  表示輸入3次皆失敗  程式直接結束
+			if(password!="ban"){
+				// 2.確認密碼
+				boolean check = false;
+				check = checkPw(password);
+				
+				// 3.ending 正確/錯誤
+				if(check){
+					JOptionPane.showMessageDialog(null, "密碼正確,恭喜您設定成功!");
+				}else{
+					JOptionPane.showMessageDialog(null, "操作終止!若有疑問,請洽服務人員!");
+				}
 			}else{
 				JOptionPane.showMessageDialog(null, "操作終止!若有疑問,請洽服務人員!");
 			}
-		}else{
-			JOptionPane.showMessageDialog(null, "操作終止!若有疑問,請洽服務人員!");
-		}
+			
+		//當JOP按到取消  就終止程式	
 		}catch(Exception e){
 			JOptionPane.showMessageDialog(null, "【系統即將終止】\n請稍後重試!");
 		}
