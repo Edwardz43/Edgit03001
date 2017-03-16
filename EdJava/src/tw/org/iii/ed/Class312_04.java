@@ -5,14 +5,14 @@ import javax.swing.JOptionPane;
 public class Class312_04 {
 
 	public static void main(String[] args) {
-		int n = 0;
+		int n = 3;
 		//1. Create Answer
 		String answer = createAnswer(n);
-		//System.out.println(answer);
+		System.out.println(answer);
 		
 		//2. Start
 		boolean isWinner = false;
-		for(int i=0; i<10; i++){
+		for(int i=0; i<3; i++){
 			//2-1. input a number string
 			String guess = JOptionPane.showInputDialog("猜"+n+"個數字:");
 			
@@ -40,7 +40,7 @@ public class Class312_04 {
 		for (int i =0 ; i < g.length(); i++){
 			if(g.charAt(i) == a.charAt(i) ){
 				A++;
-			}else if(a.indexOf(g.charAt(i))>=0){
+			}else if(a.indexOf(g.charAt(i))!=-1){
 				B++;
 			}
 		}
