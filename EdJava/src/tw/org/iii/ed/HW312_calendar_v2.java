@@ -3,6 +3,39 @@ package tw.org.iii.ed;
 import javax.swing.JOptionPane;
 
 public class HW312_calendar_v2 {  
+	
+	public static void main(String[] args){
+		try{
+			
+			int year=0;
+			int month=0;
+			String Y = JOptionPane.showInputDialog("請輸入年分:\n(格式:yyyy)");
+			year = Integer.parseInt(Y);
+			String M = JOptionPane.showInputDialog("請輸入月分:\n(格式:mm)");
+			month = Integer.parseInt(M);
+			
+			//1. 利用公式找出每月的第一天
+			int w = week(year,month);
+			
+			//2. 決定天數
+			int d =setDays(year,month);
+			
+			// 預先列出layout
+			System.out.println("列印月份: "+year+"年"+month+"月");
+			String[] week = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
+			for(String v :week){
+				System.out.print(v+"\t");
+			}
+			System.out.println();
+			
+			//3. 印出月曆
+			printCalendar(w,d);
+			
+		}catch(Exception e){
+			JOptionPane.showMessageDialog(null, "輸入錯誤,程式即將終止!\n請稍後重啟程式");
+		}
+	}
+	
 	//1. 找出firstDay_of_Month
 	static int week(int y, int m){
 		int C = y/100;
@@ -67,44 +100,14 @@ public class HW312_calendar_v2 {
 			for(int j=0;j<7;j++){
 				if(calendar[i][j] == 0){
 					System.out.print("\t");
+				}else if(days<10){
+					System.out.print("  "+(days++)+"\t");
 				}else{
-					System.out.print((days++)+"\t");
+					System.out.print(" "+(days++)+"\t");
 				}
 			}
 			System.out.println();
 		}
 	}
-	
-	public static void main(String[] args){
-		try{
-			
-			int year=0;
-			int month=0;
-			String Y = JOptionPane.showInputDialog("請輸入年分:\n(格式:yyyy)");
-			year = Integer.parseInt(Y);
-			String M = JOptionPane.showInputDialog("請輸入月分:\n(格式:mm)");
-			month = Integer.parseInt(M);
-			
-			//1. 利用公式找出每月的第一天
-			int w = week(year,month);
-			
-			//2. 決定天數
-			int d =setDays(year,month);
-			
-			// 預先列出layout
-			System.out.println("列印月份: "+year+"年"+month+"月");
-			String[] week = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
-			for(String v :week){
-				System.out.print(v+"\t");
-			}
-			System.out.println();
-			
-			//3. 印出月曆
-			printCalendar(w,d);
-			
-		}catch(Exception e){
-			JOptionPane.showMessageDialog(null, "輸入錯誤,程式即將終止!\n請稍後重啟程式");
-		}
-	} 
 }  
 
