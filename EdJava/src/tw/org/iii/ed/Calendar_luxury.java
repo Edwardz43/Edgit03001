@@ -9,48 +9,53 @@ import javax.swing.JOptionPane;
 
 public class Calendar_luxury{
 	public static void main(String[] args) throws 
-	Exception{
+		Exception{
+			
+		int mCalendar[][] = new int[6][7];   /* 宣告月曆陣列 */
+		int mWeek=0, mDays=0, mMonth=0, mYear;
+		   Calendar rightNow = Calendar.getInstance();  /* 產生 月曆元件 */
+		   String mString;
 		
-	int mCalendar[][] = new int[6][7];   /* 宣告月曆陣列 */
-	int mWeek=0, mDays=0, mMonth=0, mYear;
-	   Calendar rightNow = Calendar.getInstance();  /* 產生 月曆元件 */
-	   String mString;
-	
-	String y = JOptionPane.showInputDialog("Please enter Year: ");   
-	mYear =Integer.parseInt(y);
-	String m = JOptionPane.showInputDialog("Please enter Month: ");
-	mMonth =Integer.parseInt(m)-1;
-	System.out.println("");
-	
-	  
-	   	
-	   	if ( mMonth == 11 )   /* 計算一個月有幾天 */
-	   	rightNow.set(mYear+1,0,0);    
-	   	else
-	   	rightNow.set(mYear,mMonth+1,1);    
-	   	rightNow.add(rightNow.DATE,-1);
-	   	mDays = rightNow.get(Calendar.DATE);	    
-	   	    
-	   for ( int day=1; day<= mDays; day++ ) {  
-	      rightNow.set(mYear,mMonth,day);  /* 設定 年度,月份(0-11),天數 */     
-	      mCalendar[rightNow.get(Calendar.WEEK_OF_MONTH)][rightNow.get(Calendar.DAY_OF_WEEK)-1] = 1;	   	      
-	   }   
-	
-	/* 開始列印月曆 */
-	System.out.println("列印月份: "+mYear+"/"+(mMonth+1));
-	System.out.println("Sun Mon Tue Wed Thu Fri Sat");
-	mDays = 1;
-	for ( int i=0; i<6; i++ ) {
-	   for ( int j=0; j<7; j++ ) {
-	   	if ( mCalendar[i][j] == 1 ) {
-	   	   mString = Integer.toString(100+(mDays++));
-	   	System.out.print(" "+mString.substring(1,3)+" ");
-	   	}	
-	      else
-	      	System.out.print("    ");
+		String y = JOptionPane.showInputDialog("Please enter Year: ");   
+		mYear =Integer.parseInt(y);
+		String m = JOptionPane.showInputDialog("Please enter Month: ");
+		mMonth =Integer.parseInt(m)-1;
+		System.out.println("");
 		
-	}	  
-	   System.out.println("");      
-	}   
-	   }  
+		  
+		   	
+		   	if ( mMonth == 11 )   /* 計算一個月有幾天 */
+		   	rightNow.set(mYear+1,0,0);    
+		   	else
+		   	rightNow.set(mYear,mMonth+1,1);    
+		   	rightNow.add(rightNow.DATE,-1);
+		   	mDays = rightNow.get(Calendar.DATE);	    
+		   	    
+		   for ( int day=0; day< mDays; day++ ) {  
+		      rightNow.set(mYear,mMonth,day);  /* 設定 年度,月份(0-11),天數 */     
+		      mCalendar[rightNow.get(Calendar.WEEK_OF_MONTH)-1][rightNow.get(Calendar.DAY_OF_WEEK)-1] = 1;	   	      
+		   }   
+		   
+		   for(int[] vs :mCalendar){
+			   for(int v:vs){
+				   System.out.print(v);
+			   }
+		   }
+		/* 開始列印月曆 */
+//		System.out.println("列印月份: "+mYear+"/"+(mMonth+1));
+//		System.out.println("Sun Mon Tue Wed Thu Fri Sat");
+//		mDays = 1;
+//		for ( int i=0; i<6; i++ ) {
+//		   for ( int j=0; j<7; j++ ) {
+//		   	if ( mCalendar[i][j] == 1 ) {
+//		   	   mString = Integer.toString(100+(mDays++));
+//		   	System.out.print(" "+mString.substring(1,3)+" ");
+//		   	}	
+//		      else
+//		      	System.out.print("    ");
+//			
+//		   }	  
+//		   System.out.println("");      
+//		}   
+	}  
 }
