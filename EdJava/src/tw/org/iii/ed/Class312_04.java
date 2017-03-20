@@ -7,25 +7,31 @@ public class Class312_04 {
 	public static void main(String[] args) {
 		int n = 3;
 		//1. Create Answer
-		String answer = createAnswer(n);
+		String answer = createAnswer(n).toString();
 		System.out.println(answer);
 		
 		//2. Start
 		boolean isWinner = false;
-		for(int i=0; i<3; i++){
+		for(int i=0; i<5; i++){
 			//2-1. input a number string
 			String guess = JOptionPane.showInputDialog("猜"+n+"個數字:");
+			//2-1.1 regex check input
+			if(guess.matches("^[\\d]*$")&&guess.length()==n){
+				
+				//2-2. compare string =>result
+				StringBuffer result = new StringBuffer().append(checkAB(answer , guess));
+				System.out.println(result);
+				JOptionPane.showMessageDialog(null, result);
+				if(result.toString().equals(n+"A0B")){
+					//2-3. winner => break
+					isWinner = true;
+					break;
+				}
+				//2-4. repeat 10 times => loser
 			
-			//2-2. compare string =>result
-			String result = checkAB(answer , guess);
-			JOptionPane.showMessageDialog(null, result);
-			if(result.equals(n+"A0B")){
-				//2-3. winner => break
-				isWinner = true;
-				break;
+			}else{
+				JOptionPane.showMessageDialog(null, "輸入錯誤!");
 			}
-			//2-4. repeat 10 times => loser
-			
 		}
 		// show ......../.........
 		if(isWinner){
@@ -48,7 +54,7 @@ public class Class312_04 {
 	}
 	
 	// method: create answer
-	static String createAnswer(int number){
+	static StringBuffer createAnswer(int number){
 		boolean[] check = new boolean[10];
 		int[] poker = new int[number];
 		int temp;
@@ -60,8 +66,8 @@ public class Class312_04 {
 			poker[i] = temp;
 			check[temp]=true;
 		}
-		String ret = "";
-		for(int v :poker) ret += v;
+		StringBuffer ret = new StringBuffer();
+		for(int v :poker) ret = ret.append(v);
 		return ret;
 	} 
 }
