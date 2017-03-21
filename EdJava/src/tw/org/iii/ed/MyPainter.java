@@ -23,12 +23,12 @@ public class MyPainter extends JPanel implements MouseListener{
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D)g;
-		g2d.setStroke(new BasicStroke(10));		
-		g2d.setColor(Color.red);
+		g2d.setStroke(new BasicStroke(40));		
+		g2d.setColor(Color.blue);
 		g2d.drawOval(x, y, w, h);
 //		g2d.setColor(Color.red);
 //		g2d.drawLine(0, 400, 1000, 100);
-		System.out.println("paint");
+//		System.out.println("paint");
 	}
 
 	@Override
