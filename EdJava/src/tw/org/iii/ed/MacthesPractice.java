@@ -46,6 +46,7 @@ public class MacthesPractice {
 	public static void main(String[] args){
 		//測試各種輸入結果
 		System.out.println(checkDate("1894/9/1"));
+		System.out.println(checkDate("20170321"));
 		System.out.println(checkDate("102/09/01"));
 		System.out.println(checkPhoneNumber("02-27693495"));
 		System.out.println(checkPhoneNumber("073345678"));

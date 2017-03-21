@@ -54,7 +54,7 @@ public class Hw312_numToCheck {
 	    result = result.replace("零萬","萬");  
 	    result = result.replace("零圓","圓");
 	    result = result.replace("億萬","億零");
-	    result = result.replace("零億","億");
+	    result = result.replace("零億","億");                    
 	    convert.replace(0, convert.length(), result);
 	    return convert;  
 	}
