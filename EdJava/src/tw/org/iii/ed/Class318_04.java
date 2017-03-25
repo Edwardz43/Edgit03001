@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 
 public class Class318_04 extends JFrame{
 	private JButton open, save, exit;
-	private MyPainter myPainter;
+	private MyPainter_v3 myPainter;
 	
 	public Class318_04(){
 		// super();
@@ -20,7 +20,7 @@ public class Class318_04 extends JFrame{
 		open = new JButton("open");
 		save = new JButton("save");
 		exit = new JButton("exit");
-		myPainter = new MyPainter();
+		myPainter = new MyPainter_v3();
 		
 		JPanel top = new JPanel(new FlowLayout());
 		top.add(open); top.add(save); top.add(exit);

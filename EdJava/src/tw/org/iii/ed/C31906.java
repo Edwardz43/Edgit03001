@@ -33,6 +33,7 @@ class Triangle implements Geo{
 	public double calArea(){
 		return s1*h1/2;} 
 }
+
 class Square implements Geo{
 	private double s;
 	Square(double s){

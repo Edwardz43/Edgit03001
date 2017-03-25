@@ -3,7 +3,6 @@ package tw.org.iii.ed;
 import javax.swing.JOptionPane;
 
 public class Class312_04 {
-
 	public static void main(String[] args) {
 		int n = 3;
 		//1. Create Answer

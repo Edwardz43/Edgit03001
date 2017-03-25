@@ -40,22 +40,6 @@ public class Calendar_luxury{
 			   for(int v:vs){
 				   System.out.print(v);
 			   }
-		   }
-		/* 開始列印月曆 */
-//		System.out.println("列印月份: "+mYear+"/"+(mMonth+1));
-//		System.out.println("Sun Mon Tue Wed Thu Fri Sat");
-//		mDays = 1;
-//		for ( int i=0; i<6; i++ ) {
-//		   for ( int j=0; j<7; j++ ) {
-//		   	if ( mCalendar[i][j] == 1 ) {
-//		   	   mString = Integer.toString(100+(mDays++));
-//		   	System.out.print(" "+mString.substring(1,3)+" ");
-//		   	}	
-//		      else
-//		      	System.out.print("    ");
-//			
-//		   }	  
-//		   System.out.println("");      
-//		}   
+		   }   
 	}  
 }

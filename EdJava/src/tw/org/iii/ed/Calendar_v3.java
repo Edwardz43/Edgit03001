@@ -3,8 +3,7 @@ package tw.org.iii.ed;
 public class Calendar_v3 {  
 	//物件導向實作  可以new出calendar
 	Calendar_v3(int y){
-		System.out.println("列印年份: "+y);
-		
+		System.out.println("列印年份: "+y);		
 		for(int i=1;i<13;i++){
 			int w = week(y,i,1);
 			int d =setDays(y,i);
