@@ -15,7 +15,7 @@ public class C32510 {
 			BufferedReader br = new BufferedReader(fr);
 			String temp;
 			while((temp=br.readLine())!=null){
-				System.out.println(br.readLine());
+				System.out.println(temp);
 			}
 			br.close();			
 		} catch (Exception e) {
