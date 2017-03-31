@@ -22,7 +22,7 @@ public class MacthesPractice {
 	}
 	//檢查日期  "/"可加可不加
 	static boolean checkDate(String number){
-		if(number.matches("^[\\d]{1,4}[/]?([0]?[1-9]|[1][0-2])[/]?([0-2]?[1-9]|[3][01]|[1][0]|[2][0])$")){
+		if(number.matches("^[\\d]{1,4}[/]?([0]?[1-9]|[1][0-2])[/]?([0-2]?[1-9]|[1-3][01])$")){
 			return true;
 		}
 		return false;

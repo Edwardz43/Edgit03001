@@ -26,6 +26,8 @@ import javax.swing.JTextArea;
 public class TextBook extends JFrame{
 	//按鈕
 	private JButton open, save, exit;
+	//上方按鈕欄
+	private JPanel top;
 	//文字區塊
 	private JTextArea ta;
 	
@@ -68,7 +70,7 @@ public class TextBook extends JFrame{
 		//TextArea
 		ta = new JTextArea();
 		//上方區塊  置入三個按鈕
-		JPanel top = new JPanel(new FlowLayout());
+		top = new JPanel();
 		top.add(open); top.add(save); top.add(exit);
 		add(top, BorderLayout.NORTH);
 		add(ta, BorderLayout.CENTER);
