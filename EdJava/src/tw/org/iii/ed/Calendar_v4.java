@@ -9,7 +9,7 @@ public  class Calendar_v4 {
 		Calendar c1 = new yearCalendar(2017);
 		Calendar c2 = new monthCalendar(2017,3);
 		Calendar c3 = new dayCalendar(2017,3,21);
-		c3.printCalendar();		
+		c1.printCalendar();		
 	}
 }
 

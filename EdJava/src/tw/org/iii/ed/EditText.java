@@ -23,8 +23,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 public class EditText extends JFrame{
-	private JButton open, save, exit;
-	private JTextArea textarea;	
+	JButton open, save, exit;
+	JTextArea textarea;	
 	public EditText(){
 		super("文字編輯器");
 		setLayout(new BorderLayout());		
@@ -99,8 +99,10 @@ public class EditText extends JFrame{
 			}
 		}
 	}
+	
 	public static void main(String[] args){
 			EditText t1 = new EditText();
+	
 	}
 }
 
