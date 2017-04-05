@@ -121,8 +121,8 @@ public class CalendarwithJFrame extends JFrame{
 	public void yearCalendar(int y){
 		textarea.append("列印年份: "+y+"\n");
 		for(int k=1;k<13;k++){
-			int w = Calendar.week(y,k,1);
-			int d =Calendar.setDays(y,k);
+			int w = week(y,k,1);
+			int d = setDays(y,k);
 			textarea.append(k+"月\n");
 			textarea.append("\n");
 			String[] week = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
@@ -158,8 +158,8 @@ public class CalendarwithJFrame extends JFrame{
 	}	
 
 	public void monthCalendar(int y, int m){
-		int w = Calendar.week(y,m,1);
-		int d =Calendar.setDays(y,m);
+		int w = week(y,m,1);
+		int d = setDays(y,m);
 		
 		textarea.append("列印月份: "+y+"年"+m+"月\n");
 		textarea.append("\n");
@@ -194,8 +194,8 @@ public class CalendarwithJFrame extends JFrame{
 	}
 
 	public void dayCalendar(int y, int m, int date){
-		int w = Calendar.week(y,m,1);
-		int d =Calendar.setDays(y,m);
+		int w = week(y,m,1);
+		int d = setDays(y,m);
 		
 		textarea.append("列印月份: "+y+"年"+m+"月\n");
 		textarea.append("\n");

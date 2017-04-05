@@ -9,22 +9,13 @@ public class Hw312_numToCheck {
 			String in =JOptionPane.showInputDialog("請輸入金額:");
 			System.out.println(in);//測試用
 			
-			//先建立字串拼貼需要的素材
-			String[] chNumber = {"零","壹","貳","参","肆","伍","陸","柒","捌","玖"};
-			String[] decimal = {"圓","拾","佰","仟","萬","拾","佰","仟","億","拾","佰","仟"
-							    ,"兆","拾","佰","仟"};
 			
 			//用字串累加的概念來玩  先建立一個空的字串
 			StringBuffer convert = new StringBuffer();
 			
 			//把輸入的字串(in)轉成中文字
-			for(int i=0;i<in.length();i++){
-				int d = in.length()-i-1;
-				convert =convert.append(chNumber[in.charAt(i)-48]+decimal[d]);	
-			/*將char手動轉成int 當作chNumber的索引值  chrarAt會輸出該字元的Unicode
-			 *因為數字字元的Unicode碼是從48開始，所以-48後才會顯示出想要的數字
-			 */
-			}
+			convert = change(in);
+			
 			System.out.println(convert);//測試用
 			
 			//把拼貼成果丟去檢查
@@ -41,6 +32,22 @@ public class Hw312_numToCheck {
 	
 	//中文的奧妙 有時零要省略  有時又不能省
 	//所以用最原始的方法對付它=>手動更新例外
+	static StringBuffer change (String in){
+		//先建立字串拼貼需要的素材
+		String[] chNumber = {"零","壹","貳","参","肆","伍","陸","柒","捌","玖"};
+		String[] decimal = {"圓","拾","佰","仟","萬","拾","佰","仟","億","拾","佰","仟"
+						    ,"兆","拾","佰","仟"};
+		
+		StringBuffer convert = new StringBuffer();
+		for(int i=0;i<in.length();i++){
+			int d = in.length()-i-1;
+			convert =convert.append(chNumber[in.charAt(i)-48]+decimal[d]);
+		/*將char手動轉成int 當作chNumber的索引值  chrarAt會輸出該字元的Unicode
+		 *因為數字字元的Unicode碼是從48開始，所以-48後才會顯示出想要的數字
+		 */
+		}
+		return convert;
+	}
 	static StringBuffer setZero(StringBuffer convert){//輸入字串拼貼的結果  然後抓出不合中文語法的  
 		String result = convert.toString();
 		String[] zero = {"零拾","零佰","零仟"}; 

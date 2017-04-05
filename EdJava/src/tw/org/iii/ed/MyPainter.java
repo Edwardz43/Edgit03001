@@ -95,6 +95,7 @@ class MyMouseAdapter extends MouseAdapter{
 	public MyMouseAdapter(MyPainter painter){
 		this.painter = painter;
 	}
+	
 	@Override
 	public void mousePressed(MouseEvent e) {
 		super.mousePressed(e);

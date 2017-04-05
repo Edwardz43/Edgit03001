@@ -6,14 +6,14 @@ package tw.org.iii.ed;
  */
 public  class Calendar_v4 {  
 	public static void main(String[] args){
-		Calendar c1 = new yearCalendar(2017);
-		Calendar c2 = new monthCalendar(2017,3);
-		Calendar c3 = new dayCalendar(2017,3,21);
-		c1.printCalendar();		
+		myCalendar c1 = new yearCalendar(2017);
+		myCalendar c2 = new monthCalendar(2017,3);
+		myCalendar c3 = new dayCalendar(2017,3,21);
+		c2.printCalendar();		
 	}
 }
 
-interface Calendar{
+interface myCalendar{
 	static int week(int y, int m, int d){
 		int C = y/100; int Y = (y%100); int M = m-2;
 		if(m==1){
@@ -51,7 +51,7 @@ interface Calendar{
 }
 
 
-class yearCalendar implements Calendar{
+class yearCalendar implements myCalendar{
 	private int y;
 	public yearCalendar(int y) {
 		this.y=y;
@@ -59,28 +59,28 @@ class yearCalendar implements Calendar{
 	public void printCalendar(){
 		System.out.println("列印年份: "+y);
 		for(int k=1;k<13;k++){
-			int w = Calendar.week(y,k,1);
-			int d =Calendar.setDays(y,k);
+			int w = myCalendar.week(y,k,1);
+			int d =myCalendar.setDays(y,k);
 			System.out.println(k+"月");
 			String[] week = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
 			for(String v :week){
 				System.out.print(v+"\t");
 			}
 			System.out.println();
-			int[][] calendar = new int[6][7];
+			int[][] myCalendar = new int[6][7];
 			int[] setCalendar = new int[42];
 			for(int i=0;i<d;i++){
 				setCalendar[w+i]=1;
 			}
 			
 			for(int i=0; i<setCalendar.length; i++){
-				calendar[i/7][i%7]=setCalendar[i];
+				myCalendar[i/7][i%7]=setCalendar[i];
 			}
 			
 			int days = 1;
 			for(int i=0;i<6;i++){
 				for(int j=0;j<7;j++){
-					if(calendar[i][j] == 0){
+					if(myCalendar[i][j] == 0){
 						System.out.print("\t");
 					}else if(days<10){
 						System.out.print("  "+(days++)+"\t");
@@ -95,14 +95,14 @@ class yearCalendar implements Calendar{
 	}	
 }
 
-class monthCalendar implements Calendar{
+class monthCalendar implements myCalendar{
 	private int y, m;
 	public monthCalendar(int y, int m) {
 		this.y=y; this.m=m;
 	}
 	public void printCalendar(){
-		int w = Calendar.week(y,m,1);
-		int d =Calendar.setDays(y,m);
+		int w = myCalendar.week(y,m,1);
+		int d =myCalendar.setDays(y,m);
 		
 		System.out.println("列印月份: "+y+"年"+m+"月");
 		String[] week = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
@@ -110,20 +110,20 @@ class monthCalendar implements Calendar{
 			System.out.print(v+"\t");
 		}
 		System.out.println();
-		int[][] calendar = new int[6][7];
+		int[][] myCalendar = new int[6][7];
 		int[] setCalendar = new int[42];
 		for(int i=0;i<d;i++){
 			setCalendar[w+i]=1;
 		}
 		
 		for(int i=0; i<setCalendar.length; i++){
-			calendar[i/7][i%7]=setCalendar[i];
+			myCalendar[i/7][i%7]=setCalendar[i];
 		}
 		
 		int days = 1;
 		for(int i=0;i<6;i++){
 			for(int j=0;j<7;j++){
-				if(calendar[i][j] == 0){
+				if(myCalendar[i][j] == 0){
 					System.out.print("\t");
 				}else if(days<10){
 					System.out.print("  "+(days++)+"\t");
@@ -136,14 +136,14 @@ class monthCalendar implements Calendar{
 	}
 }
 
-class dayCalendar implements Calendar{
+class dayCalendar implements myCalendar{
 	private int y, m, d;
 	public dayCalendar(int y, int m, int d) {
 		this.y=y; this.m=m; this.d=d;
 	}
 	public void printCalendar(){
 		String week = "日一二三四五六";
-		int date = Calendar.week(y, m, d);
+		int date = myCalendar.week(y, m, d);
 		System.out.printf("%d年%d月%d日 : 星期%s",y,m,d,week.substring(date, date+1));
 	}
 }

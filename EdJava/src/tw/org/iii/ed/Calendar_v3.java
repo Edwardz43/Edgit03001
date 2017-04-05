@@ -1,6 +1,9 @@
 package tw.org.iii.ed;
 
 public class Calendar_v3 {  
+	public static void main (String[] ards){
+		Calendar_v3 v = new Calendar_v3(2017);
+	}
 	//物件導向實作  可以new出calendar
 	Calendar_v3(int y){
 		System.out.println("列印年份: "+y);		
