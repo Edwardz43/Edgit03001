@@ -13,8 +13,8 @@ import javax.swing.JFrame;
 
 public class TEST{
 	// 下面兩個常量設置縮小後圖片的大小
-	private final int WIDTH = 300;
-	private final int HEIGHT = 300;
+	private final int WIDTH = 1024;
+	private final int HEIGHT = 768;
 	// 定義個BuffedImage對象，用於保存縮小後的位圖
 	BufferedImage image = new BufferedImage(WIDTH, HEIGHT,
 	BufferedImage.TYPE_INT_RGB);
@@ -24,13 +24,11 @@ public class TEST{
 	
 	public void zoom() throws Exception {
 		// 讀取原始位圖
-		Image srcImage = ImageIO.read(new File("C:/Ed/images/001.jpg"));
+		Image srcImage = ImageIO.read(new File("D:/未命名.png"));
 		// 將原始位圖縮小後繪制到image圖象中
 		g.drawImage(srcImage, 0, 0, WIDTH, HEIGHT, null);
 		// 將image圖象文件輸出到磁盤文件中。
-		ImageIO.write(image, "jpeg", new File(System.currentTimeMillis()
-				+ ".jpg"));
-		canvas.setPreferredSize(new Dimension(300,300));
+		canvas.setPreferredSize(new Dimension(WIDTH,HEIGHT));
 		//canvas.repaint();
 		frame.add(canvas);
 		frame.pack();
