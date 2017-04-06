@@ -183,7 +183,6 @@ public class MyACD extends JFrame{
 		for(String s:parentFile.list()){
 			imagePath.add(parentFile.getAbsolutePath()+"\\"+s);
 		}
-		imagePath.sort(null);
 	}
 //	class myKeyAdapter extends KeyAdapter{
 //		@Override
