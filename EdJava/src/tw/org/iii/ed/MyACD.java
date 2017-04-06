@@ -90,14 +90,16 @@ public class MyACD extends JFrame{
 		});
 		
 		//addKeyListener(new myKeyAdapter());
-//		addComponentListener(new ComponentAdapter() {
-//			public void componentResized(ComponentEvent e)
-//		      {
-//		        final Component c = e.getComponent();
-//		        canvas.setPreferredSize(new Dimension((int) (c.getWidth() * 0.8), c.getHeight()));
-//		        canvas.revalidate();
-//		      }
-//		});
+		
+		//視窗大小監聽  好讓後面的canvas 跟圖像可以隨視窗調整大小
+		addComponentListener(new ComponentAdapter() {
+			public void componentResized(ComponentEvent e)
+		      {
+		        final Component c = e.getComponent();
+		        canvas.setPreferredSize(new Dimension((int) (c.getWidth()), c.getHeight()));
+		        canvas.revalidate();
+		      }
+		});
 		
 		JPanel bottom = new JPanel();
 		canvas = new MyCanvas();
@@ -117,7 +119,7 @@ public class MyACD extends JFrame{
 		try{
 			imagePath.indexOf(file.getAbsolutePath());
 			String dPage = imagePath.get(imagePath.indexOf(file.getAbsolutePath())+1);
-			file = new File(dPage);
+			file = new File(dPage.toString());
 			Image srcImage = ImageIO.read(file);
 			int w =srcImage.getWidth(null) ; int h = srcImage.getHeight(null);
 			canvas.setPreferredSize(new Dimension(w,h));
@@ -139,7 +141,6 @@ public class MyACD extends JFrame{
 		try{
 			imagePath.indexOf(file.getAbsolutePath());
 			String uPage = imagePath.get(imagePath.indexOf(file.getAbsolutePath())-1);
-			file = new File(uPage);
 			file = new File(uPage.toString());
 			Image srcImage = ImageIO.read(file);
 			int w =srcImage.getWidth(null) ; int h = srcImage.getHeight(null);
@@ -155,22 +156,27 @@ public class MyACD extends JFrame{
 			JOptionPane.showMessageDialog(null, "到盡頭了!");
 		}
 	}
-
+	//開啟檔案
 	public void open() throws Exception {
-		// 讀取原始位圖
 		JFileChooser fc = new JFileChooser();
 		int option = fc.showDialog(null, null);
 		if(option == JFileChooser.APPROVE_OPTION){
 			file = fc.getSelectedFile();
 			Image srcImage = ImageIO.read(file);
+			
+			//抓一下原圖檔的大小
 			int w =srcImage.getWidth(null) ; int h = srcImage.getHeight(null);
 			image = new BufferedImage(w, h,
 						BufferedImage.TYPE_INT_RGB);
 			g = image.getGraphics();
 			g.drawImage(srcImage, 0, 0, w, h, null);
+			
+			//配合視窗的縮放來調整canvas的大小
 			js.setPreferredSize(new Dimension(w,h));
 			canvas.setPreferredSize(new Dimension(w,h));
 			pack();
+			
+			//畫出圖像
 			canvas.repaint();
 		}
 		File parentFile = new File(file.getParent());
@@ -193,10 +199,12 @@ public class MyACD extends JFrame{
 //			}
 //		}
 //	}
+	//override一下paint的畫法
 	class MyCanvas extends Canvas{
 		@Override
 		public void paint(Graphics g) {
-			g.drawImage(image,0,0,null);
+			//根據canvas的大小來決定圖象的縮放
+			g.drawImage(image, 0, 0, canvas.getWidth(), canvas.getHeight(), null);
 		}
 	}
 	
