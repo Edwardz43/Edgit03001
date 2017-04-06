@@ -2,13 +2,16 @@ package tw.org.iii.ed;
 
 import java.awt.BorderLayout;
 import java.awt.Canvas;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -16,26 +19,28 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.security.Key;
-
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.plaf.FileChooserUI;
+import javax.swing.text.AbstractDocument.Content;
 
 public class MyACD extends JFrame{
-	// 下面兩個常量設置縮小後圖片的大小
-	private final int WIDTH = 1440;
-	private final int HEIGHT = 960;
-	// 定義個BuffedImage對象，用於保存縮小後的位圖
-	BufferedImage image = new BufferedImage(WIDTH, HEIGHT,
-	BufferedImage.TYPE_INT_RGB);
-	Graphics g = image.getGraphics();
+	int WIDTH=1024;
+	int HEIGHT=768;
+	BufferedImage image;
+	Graphics g ;
 	MyCanvas canvas;
 	JButton open, exit, up, down;
 	File file;
+	ArrayList<String> imagePath;
+	JScrollPane js;
 	
 	public MyACD(){
 		super("看圖程式");
@@ -61,7 +66,6 @@ public class MyACD extends JFrame{
 				try {
 					upPage();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -85,40 +89,45 @@ public class MyACD extends JFrame{
 			}
 		});
 		
-		addKeyListener(new myKeyAdapter());
-		
+		//addKeyListener(new myKeyAdapter());
+//		addComponentListener(new ComponentAdapter() {
+//			public void componentResized(ComponentEvent e)
+//		      {
+//		        final Component c = e.getComponent();
+//		        canvas.setPreferredSize(new Dimension((int) (c.getWidth() * 0.8), c.getHeight()));
+//		        canvas.revalidate();
+//		      }
+//		});
 		
 		JPanel bottom = new JPanel();
 		canvas = new MyCanvas();
+		imagePath = new ArrayList<>();
 		bottom.add(open);bottom.add(up);bottom.add(down);bottom.add(exit);
 		add(bottom, BorderLayout.SOUTH);
-		add(canvas, FlowLayout.CENTER);
-		setSize(WIDTH, HEIGHT);
+		js = new JScrollPane(canvas, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		add(js, FlowLayout.CENTER);
+		setPreferredSize(new Dimension(WIDTH, HEIGHT));
+		pack();
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	
 	protected void downPage() {
-		String s = file.toString();
-		//System.out.println(s);
-		int p = Integer.parseInt(s.substring(s.length()-7, s.length()-4))+1;
-		System.out.println(p);
-		StringBuffer dpp = new StringBuffer();
 		try{
-			if(p >= 100){
-				dpp = dpp.append(s.substring(0, s.length()-7)+p+".jpg");
-			}else if(p<100 && p>=10){
-				dpp = dpp.append(s.substring(0, s.length()-7)+"0"+p+".jpg");
-			}else{
-				dpp = dpp.append(s.substring(0, s.length()-7)+"00"+p+".jpg");
-			}
-			System.out.println(dpp);
-			file = new File(dpp.toString());
+			imagePath.indexOf(file.getAbsolutePath());
+			String dPage = imagePath.get(imagePath.indexOf(file.getAbsolutePath())+1);
+			file = new File(dPage);
 			Image srcImage = ImageIO.read(file);
-			// 將原始位圖縮小後繪制到image圖象中
-			g.drawImage(srcImage, 0, 0, WIDTH, HEIGHT, null);
-			// 將image圖象文件輸出到磁盤文件中。
-			canvas.setPreferredSize(new Dimension(WIDTH,HEIGHT));
+			int w =srcImage.getWidth(null) ; int h = srcImage.getHeight(null);
+			canvas.setPreferredSize(new Dimension(w,h));
+			image = new BufferedImage(w, h,
+						BufferedImage.TYPE_INT_RGB);
+			g = image.getGraphics();
+			g.drawImage(srcImage, 0, 0, w, h, null);
+			//pack();
+			js.setPreferredSize(new Dimension(w,h));
+			canvas.setPreferredSize(new Dimension(w,h));
 			canvas.repaint();
 		}catch(Exception ee){
 			JOptionPane.showMessageDialog(null, "到盡頭了!");
@@ -127,28 +136,21 @@ public class MyACD extends JFrame{
 	}
 
 	protected void upPage() throws IOException {
-		String s = file.toString();
-		//System.out.println(s);
-		int p = Integer.parseInt(s.substring(s.length()-7, s.length()-4))-1;
-		System.out.println(p);
-		StringBuffer upp = new StringBuffer();
 		try{
-			if(p >= 100){
-				upp = upp.append(s.substring(0, s.length()-7)+p+".jpg");
-			}else if(p<100 && p>=10){
-				upp = upp.append(s.substring(0, s.length()-7)+"0"+p+".jpg");
-			}else{
-				upp = upp.append(s.substring(0, s.length()-7)+"00"+p+".jpg");
-			}
-			//System.out.println(upp);
-			file = new File(upp.toString());
+			imagePath.indexOf(file.getAbsolutePath());
+			String uPage = imagePath.get(imagePath.indexOf(file.getAbsolutePath())-1);
+			file = new File(uPage);
+			file = new File(uPage.toString());
 			Image srcImage = ImageIO.read(file);
-			// 將原始位圖縮小後繪制到image圖象中
-			g.drawImage(srcImage, 0, 0, WIDTH, HEIGHT, null);
-			// 將image圖象文件輸出到磁盤文件中。
-			canvas.setPreferredSize(new Dimension(WIDTH,HEIGHT));
+			int w =srcImage.getWidth(null) ; int h = srcImage.getHeight(null);
+			image = new BufferedImage(w, h,
+						BufferedImage.TYPE_INT_RGB);
+			g = image.getGraphics();
+			g.drawImage(srcImage, 0, 0, w, h, null);
+			js.setPreferredSize(new Dimension(w,h));
+			canvas.setPreferredSize(new Dimension(w,h));
+			//pack();
 			canvas.repaint();
-			
 		}catch(Exception ee){
 			JOptionPane.showMessageDialog(null, "到盡頭了!");
 		}
@@ -161,29 +163,36 @@ public class MyACD extends JFrame{
 		if(option == JFileChooser.APPROVE_OPTION){
 			file = fc.getSelectedFile();
 			Image srcImage = ImageIO.read(file);
-			// 將原始位圖縮小後繪制到image圖象中
-			g.drawImage(srcImage, 0, 0, WIDTH, HEIGHT, null);
-			// 將image圖象文件輸出到磁盤文件中。
-			canvas.setPreferredSize(new Dimension(WIDTH,HEIGHT));
+			int w =srcImage.getWidth(null) ; int h = srcImage.getHeight(null);
+			image = new BufferedImage(w, h,
+						BufferedImage.TYPE_INT_RGB);
+			g = image.getGraphics();
+			g.drawImage(srcImage, 0, 0, w, h, null);
+			js.setPreferredSize(new Dimension(w,h));
+			canvas.setPreferredSize(new Dimension(w,h));
+			pack();
 			canvas.repaint();
-			
 		}
-	}
-	class myKeyAdapter extends KeyAdapter{
-		@Override
-		public void keyReleased(KeyEvent e){
-			if(e.getKeyCode()==37){
-				try {
-					upPage();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}else if(e.getKeyCode()==39){
-				downPage();
-			}
+		File parentFile = new File(file.getParent());
+		for(String s:parentFile.list()){
+			imagePath.add(parentFile.getAbsolutePath()+"\\"+s);
 		}
+		imagePath.sort(null);
 	}
+//	class myKeyAdapter extends KeyAdapter{
+//		@Override
+//		public void keyReleased(KeyEvent e){
+//			if(e.getKeyCode()==37){
+//				try {
+//					upPage();
+//				} catch (IOException e1) {
+//					e1.printStackTrace();
+//				}
+//			}else if(e.getKeyCode()==39){
+//				downPage();
+//			}
+//		}
+//	}
 	class MyCanvas extends Canvas{
 		@Override
 		public void paint(Graphics g) {
