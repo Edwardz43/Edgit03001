@@ -6,19 +6,14 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.security.Key;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -45,6 +40,7 @@ public class MyACD extends JFrame{
 	File file;
 	ArrayList<String> imagePath;//用來儲存檔案path
 	JScrollPane js;//圖像太大的話 設定視窗可以滾動
+	int w, h;//原始圖像的大小
 	
 	public MyACD(){
 		super("圖像瀏覽器");
@@ -119,7 +115,6 @@ public class MyACD extends JFrame{
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		add(js, FlowLayout.CENTER);
 		
-		
 		//預設視窗大小
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		pack();
@@ -131,7 +126,7 @@ public class MyACD extends JFrame{
 	public void open() {
 		try{
 			//用filechooser選擇開啟的檔案  預先設定path這樣方便下次開啟檔案
-			JFileChooser fc = new JFileChooser("D:/漫畫");
+			JFileChooser fc = new JFileChooser("C:\\Users\\Mac");
 			int option = fc.showDialog(null, null);
 			if(option == JFileChooser.APPROVE_OPTION){
 				file = fc.getSelectedFile();
@@ -140,20 +135,19 @@ public class MyACD extends JFrame{
 				Image srcImage = ImageIO.read(file);
 				
 				//抓一下原圖檔的大小
-				int w =srcImage.getWidth(null); int h = srcImage.getHeight(null);
+				w =srcImage.getWidth(null); h = srcImage.getHeight(null);
 				
 				//預設一塊空白區域 可以容納image的size  
 				image = new BufferedImage(w, h,
 							BufferedImage.TYPE_INT_RGB);
 				g = image.getGraphics();
-				//Graphics2D g2d = (Graphics2D)g;
 				
 				//將影像寫入上面的區域
-				g.drawImage(srcImage, 0, 0, w, h, null);;
+				g.drawImage(srcImage, 0, 0, WIDTH, HEIGHT,null);
 				pack();
 					
-				//設定是窗大小 符合原圖的尺寸
-				setSize(new Dimension(w, h));
+				//設定是窗大小 
+				setSize(new Dimension(canvas.getWidth(), canvas.getHeight()));
 					
 				//扣板機  畫出圖像
 				canvas.repaint();
@@ -189,7 +183,7 @@ public class MyACD extends JFrame{
 			Image srcImage = ImageIO.read(file);
 			
 			//抓出原圖的尺寸
-			int w =srcImage.getWidth(null) ; int h = srcImage.getHeight(null);
+			w =srcImage.getWidth(null) ; h = srcImage.getHeight(null);
 			
 			//預設一塊區域 可以容納image的size 
 			image = new BufferedImage(w, h,
@@ -197,10 +191,10 @@ public class MyACD extends JFrame{
 			g = image.getGraphics();
 			
 			//將影像寫入上面的區域
-			g.drawImage(srcImage, 0, 0, w, h, null);
+			g.drawImage(srcImage, 0, 0, WIDTH, HEIGHT,null);
 			
-			//設定視窗大小 符合原圖的尺寸
-			setSize(new Dimension(w, h));
+			//設定視窗大小 
+			setSize(new Dimension(canvas.getWidth(), canvas.getHeight()));
 			
 			//扣下板機  畫出圖像
 			canvas.repaint();
@@ -225,7 +219,7 @@ public class MyACD extends JFrame{
 			Image srcImage = ImageIO.read(file);
 			
 			//抓出原圖的尺寸
-			int w =srcImage.getWidth(null) ; int h = srcImage.getHeight(null);
+			w =srcImage.getWidth(null) ; h = srcImage.getHeight(null);
 			
 			//預設一塊空白區域 可以容納image的size 
 			image = new BufferedImage(w, h,
@@ -233,10 +227,10 @@ public class MyACD extends JFrame{
 			g = image.getGraphics();
 			
 			//將影像寫入上面的區域
-			g.drawImage(srcImage, 0, 0, w, h, null);
+			g.drawImage(srcImage, 0, 0, WIDTH, HEIGHT,null);
 			
-			//設定視窗大小 符合原圖的尺寸
-			setSize(new Dimension(w, h));
+			//設定視窗大小 
+			setSize(new Dimension(canvas.getWidth(), canvas.getHeight()));
 			//扣板機  畫出圖像
 			canvas.repaint();
 			//左上顯示頁數
@@ -250,8 +244,8 @@ public class MyACD extends JFrame{
 	class MyCanvas extends Canvas{
 		@Override
 		public void paint(Graphics g) {
-			//根據canvas的大小來決定圖象的縮放
-			g.drawImage(image, 0, 0, canvas.getWidth(), canvas.getHeight(), null);
+			//根據圖像的大小畫出
+			g.drawImage(image, 0, 0, w, h, null);
 		}
 	}
 	
