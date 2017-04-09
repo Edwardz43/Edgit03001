@@ -16,7 +16,7 @@ public class C40817 {
 			ServerSocket server = new ServerSocket(9999);
 			Socket socket = server.accept();
 			
-			System.out.println(socket.getInetAddress().getHostAddress());
+			String urip = socket.getLocalAddress().getHostAddress();
 			
 			BufferedOutputStream bout = new BufferedOutputStream(
 					new FileOutputStream("./dir2/iii.jpg"));
@@ -30,7 +30,7 @@ public class C40817 {
 			bout.close();
 			
 			server.close();
-			System.out.println("Receive ok");
+			System.out.println("收到"+urip+"的來信");
 		} catch (IOException e) {
 			System.out.println(e.toString());
 		}
