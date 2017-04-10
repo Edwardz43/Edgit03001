@@ -23,9 +23,9 @@ public class DigitalSign extends JFrame{
 		setLayout(new BorderLayout());
 		
 		clear= new JButton("清空");undo= new JButton("undo");redo= new JButton("redo");stroke= new JButton("筆畫粗細");
-		color =  new JButton("設定顏色");BGC= new JButton("背景顏色");
+		color =  new JButton("設定顏色");BGC= new JButton("背景顏色");save= new JButton("儲存");open= new JButton("開啟檔案");
 		JPanel top = new JPanel(new FlowLayout());
-		top.add(clear);top.add(undo);top.add(redo);top.add(color);top.add(stroke);top.add(BGC);
+		top.add(clear);top.add(undo);top.add(redo);top.add(color);top.add(stroke);top.add(BGC);top.add(save);top.add(open);
 		add(top, BorderLayout.NORTH);
 		msp = new MySignPanel(this);
 		add(msp, BorderLayout.CENTER);
@@ -84,7 +84,23 @@ public class DigitalSign extends JFrame{
 			}
 		});
 		
-		setSize(640, 480);
+		//儲存簽名
+		save.addActionListener(new ActionListener() {	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				msp.saveFile();
+			}
+		});
+		
+		//開啟舊檔
+		open.addActionListener(new ActionListener() {	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				msp.openFile();
+			}
+		});
+		
+		setSize(800, 600);
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
