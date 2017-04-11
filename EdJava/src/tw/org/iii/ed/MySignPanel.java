@@ -17,6 +17,7 @@ import java.util.LinkedList;
 
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class MySignPanel extends JPanel{
@@ -78,6 +79,7 @@ public class MySignPanel extends JPanel{
 			
 			//畫線
 			LinkedList<HashMap<String, Integer>> line = lines.get(j);
+			System.out.println(myColor);
 			for(int i = 1 ; i<line.size(); i++){
 				HashMap<String, Integer> p0 = line.get(i-1);
 				HashMap<String, Integer> p1 = line.get(i);
@@ -90,10 +92,16 @@ public class MySignPanel extends JPanel{
 	//變色
 	public void changeColor(){
 		myColor= JColorChooser.showDialog(this, "Select a Color :", Color.BLUE);
+		System.out.println(myColor);
 	}
 	//變粗細
-	public void changeStroke(int stroke) {
-		myStroke = stroke;
+	public void changeStroke() {
+		//用JOP來輸入粗細  加個try/catch避免輸入錯誤
+		try{
+			myStroke = Integer.parseInt(JOptionPane.showInputDialog("輸入筆畫粗細 :"));
+		}catch(Exception ee){
+			JOptionPane.showMessageDialog(null, "請輸入正確數字!");
+		}
 	}
 	
 	//清空  三個都清

@@ -23,9 +23,12 @@ public class DigitalSign extends JFrame{
 		
 		clear= new JButton("清空");undo= new JButton("undo");redo= new JButton("redo");stroke= new JButton("筆畫粗細");
 		color =  new JButton("設定顏色");BGC= new JButton("背景顏色");save= new JButton("儲存");open= new JButton("開啟檔案");
+		
 		JPanel bottom = new JPanel(new FlowLayout());
+		
 		bottom.add(clear);bottom.add(undo);bottom.add(redo);bottom.add(BGC);bottom.add(color);bottom.add(stroke);
 		bottom.add(save);bottom.add(open);
+		
 		add(bottom, BorderLayout.SOUTH);
 		msp = new MySignPanel(this);
 		add(msp, BorderLayout.CENTER);
@@ -55,7 +58,6 @@ public class DigitalSign extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				msp.changeColor();
-				
 			}
 		});
 		
@@ -63,19 +65,12 @@ public class DigitalSign extends JFrame{
 		stroke.addActionListener(new ActionListener() {	
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//用JOP來輸入粗細  加個try/catch避免輸入錯誤
-				try{
-					int  stroke = Integer.parseInt(JOptionPane.showInputDialog("輸入筆畫粗細 :"));
-					msp.changeStroke(stroke);
-				}catch(Exception ee){
-					JOptionPane.showMessageDialog(null, "請輸入正確數字!");
-				}
+				msp.changeStroke();
 			}
 		});
 		
 		//換背景顏色的按鈕
-		BGC.addActionListener(new ActionListener() {
-			
+		BGC.addActionListener(new ActionListener() {		
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Color bgc = JColorChooser.showDialog(DigitalSign.this, "Select a Color :", Color.yellow);
@@ -103,10 +98,6 @@ public class DigitalSign extends JFrame{
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
-	class myJPanel extends JPanel{
-		
-	}
-	
 
 	public static void main(String[] args) {
 		new DigitalSign();
