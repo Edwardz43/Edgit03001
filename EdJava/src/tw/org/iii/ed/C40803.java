@@ -9,7 +9,7 @@ public class C40803 {
 		String data = "Hello , Brad\nLine1\nLine2";
 		File outFile = new File("./dir1/ed.txt");
 		try {
-			FileOutputStream fout = new FileOutputStream(outFile, true);
+			FileOutputStream fout = new FileOutputStream(outFile, false);
 			fout.write(data.getBytes());
 			fout.flush();
 			fout.close();

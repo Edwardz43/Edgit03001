@@ -9,6 +9,7 @@ import java.net.Socket;
 
 public class C40815 {
 	public static void main(String[] args){
+		for(;;){
 		try {
 			ServerSocket server = new ServerSocket(9999);
 			
@@ -19,13 +20,14 @@ public class C40815 {
 			
 			int i;String line;
 			while((line = br.readLine()) != null){
-				System.out.print(line);
+				System.out.println(line);
 			}
 			br.close();
 			server.close();
 			//System.out.println("ok");
 		} catch (IOException e) {
 			System.out.println(e.toString());
+		}
 		}
 		
 	}

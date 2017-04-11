@@ -20,7 +20,6 @@ public class C40806 {
 			din.close();
 			System.out.println("=>" +a+":"+b+":"+c1+":"+c2);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

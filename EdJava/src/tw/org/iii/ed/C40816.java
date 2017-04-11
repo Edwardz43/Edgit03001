@@ -26,7 +26,7 @@ public class C40816 {
 			out.close();
 				
 			socket.close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
 	}

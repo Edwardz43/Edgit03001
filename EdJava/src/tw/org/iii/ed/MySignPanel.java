@@ -8,9 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -35,26 +33,26 @@ public class MySignPanel extends JPanel{
 	private int myStroke;
 	
 	public MySignPanel(DigitalSign ds){
-		setBackground(Color.yellow);
-		
-		//在這邊 先暫定藍色  粗細5
-		myColor =  Color.BLUE;
+
+		//在這邊先暫定 背景淺灰色  筆畫黑色  粗細5
+		setBackground(Color.lightGray);
+		myColor =  Color.BLACK;
 		myStroke = 5;
 		
 		MyMouseListener listener = new MyMouseListener();
 		addMouseListener(listener);
 		addMouseMotionListener(listener);
-		myColor =  Color.BLUE;
-		myStroke = 5;
 		
 		lines = new LinkedList<>();
 		recycle = new LinkedList<>();
 		
-		//弄兩個新的  等等要拿來存color跟stroke
+		//弄幾個新的LinkedList 等等要拿來存color跟stroke
 		color = new LinkedList<>();
 		colorRecycle = new LinkedList<>();
 		stroke = new LinkedList<>();
 		strokeRecycle = new LinkedList<>();
+		
+		//拿來存簽名檔的  可序列化  方便存取
 		sign = new ArrayList();
 
 		
@@ -133,8 +131,8 @@ public class MySignPanel extends JPanel{
 	
 	//檔案總管的應用: 紀錄檔案
 	//這邊我選擇用一個普通的ArrayList 來存放簽名檔 
-	//裡面會有  筆畫  回收桶  顏色  粗細 四種資料 都是LinkedList
-	//存檔的時候依序存入 因為是List 有資源序列化  所以用ObjectOutputStream
+	//裡面會有  筆畫  回收桶  粗細 顏色   四種資料 都是LinkedList
+	//存檔的時候依序存入 因為是List 有支援序列化  所以用ObjectOutputStream
 	public void saveFile() {
 		JFileChooser fc = new JFileChooser("./dir2");
 		int option = fc.showSaveDialog(null);
@@ -153,7 +151,7 @@ public class MySignPanel extends JPanel{
 	}
 	
 	//讀取簽名檔 一樣是作業的應用
-	//開啟後記的轉回原型ArrayList<LinkedList> 然後依序取出裡面的資料
+	//開啟後記得轉回原型:ArrayList<LinkedList> 然後【依序】取出裡面的資料(順序不能亂)
 	public void openFile() {
 		JFileChooser fc = new JFileChooser("./dir2");
 		int option = fc.showOpenDialog(null);
@@ -165,7 +163,6 @@ public class MySignPanel extends JPanel{
 				oin.close();
 				sign = (ArrayList<LinkedList>)obj;
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

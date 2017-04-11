@@ -3,16 +3,15 @@ package tw.org.iii.ed;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.nio.channels.NetworkChannel;
-
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 
 public class DigitalSign extends JFrame{
 	private JButton clear, undo, redo, color, stroke, BGC, save, open;
@@ -24,9 +23,10 @@ public class DigitalSign extends JFrame{
 		
 		clear= new JButton("清空");undo= new JButton("undo");redo= new JButton("redo");stroke= new JButton("筆畫粗細");
 		color =  new JButton("設定顏色");BGC= new JButton("背景顏色");save= new JButton("儲存");open= new JButton("開啟檔案");
-		JPanel top = new JPanel(new FlowLayout());
-		top.add(clear);top.add(undo);top.add(redo);top.add(color);top.add(stroke);top.add(BGC);top.add(save);top.add(open);
-		add(top, BorderLayout.NORTH);
+		JPanel bottom = new JPanel(new FlowLayout());
+		bottom.add(clear);bottom.add(undo);bottom.add(redo);bottom.add(BGC);bottom.add(color);bottom.add(stroke);
+		bottom.add(save);bottom.add(open);
+		add(bottom, BorderLayout.SOUTH);
 		msp = new MySignPanel(this);
 		add(msp, BorderLayout.CENTER);
 		
@@ -64,13 +64,15 @@ public class DigitalSign extends JFrame{
 		stroke.addActionListener(new ActionListener() {	
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//用JOP來輸入粗細  加個try/catch避免輸入錯誤
-				try{
-					int  stroke = Integer.parseInt(JOptionPane.showInputDialog("輸入筆畫粗細 :"));
-					msp.changeStroke(stroke);
-				}catch(Exception ee){
-					JOptionPane.showMessageDialog(null, "請輸入正確數字!");
-				}
+				JCheckBox jcb = new JCheckBox();
+				jcb.setVisible(true);
+//				//用JOP來輸入粗細  加個try/catch避免輸入錯誤
+//				try{
+//					int  stroke = Integer.parseInt(JOptionPane.showInputDialog("輸入筆畫粗細 :"));
+//					msp.changeStroke(stroke);
+//				}catch(Exception ee){
+//					JOptionPane.showMessageDialog(null, "請輸入正確數字!");
+//				}
 			}
 		});
 		
@@ -103,6 +105,9 @@ public class DigitalSign extends JFrame{
 		setSize(800, 600);
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+	class myJPanel extends JPanel{
+		
 	}
 	
 
