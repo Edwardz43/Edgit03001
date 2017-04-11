@@ -2,6 +2,7 @@ package tw.org.iii.ed;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,7 +29,7 @@ import javax.swing.ScrollPaneConstants;
 //聊天程式 v1.0
 //目前就先跟自己聊天
 public class ChatRoom extends JFrame{
-	JPanel top, bottom;
+	JPanel top, bottom, sidebar1, sidebar2;
 	JTextField tf;
 	JTextArea ta;
 	JButton input;
@@ -45,7 +46,7 @@ public class ChatRoom extends JFrame{
 		top.add(label);
 		
 		//中間的主角 聊天的內容
-		ta = new JTextArea("");
+		ta = new JTextArea("Welcome to ChatRoom v1.0\n");
 		//設定不能輸入  只供觀看
 		ta.setEditable(false);
 		//BGC
@@ -56,12 +57,16 @@ public class ChatRoom extends JFrame{
 		sp = new JScrollPane(ta, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		
+		sidebar1 = new JPanel();
+		sidebar2 = new JPanel();
+		
 		//底層  有textfield可輸入內容  有一個button可以按下後輸入
 		bottom = new JPanel();
 		tf = new JTextField();
 		
 		//設定可以輸入多少字(寬度)
 		tf.setColumns(50);
+		
 		
 		//加入滑鼠跟按鍵監聽
 		MyMouseListener listener = new MyMouseListener();
@@ -83,6 +88,8 @@ public class ChatRoom extends JFrame{
 		
 		add(top, BorderLayout.NORTH);
 		add(sp, BorderLayout.CENTER);
+		add(sidebar1, BorderLayout.EAST);
+		add(sidebar2, BorderLayout.WEST);
 		add(bottom, BorderLayout.SOUTH);
 		
 		setSize(800,600);
