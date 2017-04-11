@@ -35,11 +35,6 @@ public class MySignPanel extends JPanel{
 	private int myStroke;
 	
 	public MySignPanel(DigitalSign ds){
-
-		//在這邊先暫定 背景淺灰色  筆畫黑色  粗細5
-		setBackground(Color.lightGray);
-		myColor =  Color.BLACK;
-		myStroke = 5;
 		
 		MyMouseListener listener = new MyMouseListener();
 		addMouseListener(listener);
@@ -57,6 +52,10 @@ public class MySignPanel extends JPanel{
 		//拿來存簽名檔的  可序列化  方便存取
 		sign = new ArrayList();
 
+		//在這邊先暫定 背景淺灰色  筆畫黑色  粗細5
+		setBackground(Color.lightGray);
+		myColor =  Color.BLACK;
+		myStroke = 5;
 		
 	}
 	// 1. mouse event, 2. data structure, 3. draw
@@ -79,7 +78,8 @@ public class MySignPanel extends JPanel{
 			
 			//畫線
 			LinkedList<HashMap<String, Integer>> line = lines.get(j);
-			System.out.println(myColor);
+			//System.out.println(myColor); 
+			//測試用的
 			for(int i = 1 ; i<line.size(); i++){
 				HashMap<String, Integer> p0 = line.get(i-1);
 				HashMap<String, Integer> p1 = line.get(i);
@@ -92,7 +92,8 @@ public class MySignPanel extends JPanel{
 	//變色
 	public void changeColor(){
 		myColor= JColorChooser.showDialog(this, "Select a Color :", Color.BLUE);
-		System.out.println(myColor);
+		//System.out.println(myColor);
+		//測試用的
 	}
 	//變粗細
 	public void changeStroke() {
