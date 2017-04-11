@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
@@ -87,8 +88,8 @@ public class MySignPanel extends JPanel{
 	}
 	
 	//變色
-	public void changeColor(Color color){
-		myColor=color;
+	public void changeColor(){
+		myColor= JColorChooser.showDialog(this, "Select a Color :", Color.BLUE);
 	}
 	//變粗細
 	public void changeStroke(int stroke) {

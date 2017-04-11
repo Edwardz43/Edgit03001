@@ -54,8 +54,7 @@ public class DigitalSign extends JFrame{
 		color.addActionListener(new ActionListener() {		
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Color myColor = JColorChooser.showDialog(DigitalSign.this, "Select a Color :", Color.BLUE);
-				msp.changeColor(myColor);
+				msp.changeColor();
 				
 			}
 		});
@@ -64,15 +63,13 @@ public class DigitalSign extends JFrame{
 		stroke.addActionListener(new ActionListener() {	
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JCheckBox jcb = new JCheckBox();
-				jcb.setVisible(true);
-//				//用JOP來輸入粗細  加個try/catch避免輸入錯誤
-//				try{
-//					int  stroke = Integer.parseInt(JOptionPane.showInputDialog("輸入筆畫粗細 :"));
-//					msp.changeStroke(stroke);
-//				}catch(Exception ee){
-//					JOptionPane.showMessageDialog(null, "請輸入正確數字!");
-//				}
+				//用JOP來輸入粗細  加個try/catch避免輸入錯誤
+				try{
+					int  stroke = Integer.parseInt(JOptionPane.showInputDialog("輸入筆畫粗細 :"));
+					msp.changeStroke(stroke);
+				}catch(Exception ee){
+					JOptionPane.showMessageDialog(null, "請輸入正確數字!");
+				}
 			}
 		});
 		
