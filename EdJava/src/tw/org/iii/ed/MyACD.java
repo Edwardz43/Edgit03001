@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -38,9 +40,12 @@ public class MyACD extends JFrame{
 	MyCanvas canvas;//重要的畫布
 	JButton open, exit, pre, next;
 	File file;
+	JPanel bottom;
 	ArrayList<String> imagePath;//用來儲存檔案path
 	JScrollPane js;//圖像太大的話 設定視窗可以滾動
 	int w, h;//原始圖像的大小
+	String currentFile="";
+	String parentName="";
 	
 	public MyACD(){
 		super("圖像瀏覽器");
@@ -57,6 +62,7 @@ public class MyACD extends JFrame{
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
+				bottom.requestFocus();
 			}
 		});
 		
@@ -70,6 +76,7 @@ public class MyACD extends JFrame{
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
+				bottom.requestFocus();
 			}
 		});
 		
@@ -79,6 +86,7 @@ public class MyACD extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				nextPage();
+				bottom.requestFocus();
 			}
 		});
 		
@@ -103,14 +111,32 @@ public class MyACD extends JFrame{
 				canvas.revalidate();
 		    }
 		});
-		
-		JPanel bottom = new JPanel();
-		canvas = new MyCanvas();
+		bottom = new JPanel();
+		bottom.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent ee){
+				int envent = ee.getKeyCode();
+				switch(envent){
+					case KeyEvent.VK_LEFT:
+					try {
+						prePage();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					break;
+					case KeyEvent.VK_RIGHT:
+						nextPage();
+						break;
+					case KeyEvent.VK_ESCAPE:
+						open();
+				}
+			}
+		});
 		imagePath = new ArrayList<>();
 		bottom.add(open);bottom.add(pre);bottom.add(next);bottom.add(exit);
 		add(bottom, BorderLayout.SOUTH);
 		
 		//防止圖檔過大  設置一個可滾動區域
+		canvas = new MyCanvas();
 		js = new JScrollPane(canvas, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		add(js, FlowLayout.CENTER);
@@ -121,16 +147,17 @@ public class MyACD extends JFrame{
 		
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		bottom.requestFocus();
 	}
 	//開啟檔案
 	public void open() {
 		try{
 			//用filechooser選擇開啟的檔案  預先設定path這樣方便下次開啟檔案
-			JFileChooser fc = new JFileChooser("C:\\Users\\Mac");
+			JFileChooser fc = new JFileChooser(currentFile);
 			int option = fc.showDialog(null, null);
 			if(option == JFileChooser.APPROVE_OPTION){
 				file = fc.getSelectedFile();
-		
+				currentFile =file.getPath();
 				//將檔案轉成影像image
 				Image srcImage = ImageIO.read(file);
 				
@@ -143,7 +170,7 @@ public class MyACD extends JFrame{
 				g = image.getGraphics();
 				
 				//將影像寫入上面的區域
-				g.drawImage(srcImage, 0, 0, WIDTH, HEIGHT,null);
+				g.drawImage(srcImage, 0, 0, w, h,null);
 				pack();
 					
 				//設定是窗大小 
@@ -151,17 +178,19 @@ public class MyACD extends JFrame{
 					
 				//扣板機  畫出圖像
 				canvas.repaint();
-				//左上顯示頁數
-				setTitle("圖像瀏覽器-"+file.getName());
-			}
-			/*當開啟第一張圖檔的同時  順便找出上一層的資料夾(parentfile)位置
-			 * 然後將同一個資料夾裡的圖檔的path一併存放在ArrayList裡
-			 * 之後要跳前後頁  就可以利用List裡的index來找出位置 
-			 */
-			File parentFile = new File(file.getParent());
-			//foreach 將全部圖檔的path存在ArrayList
-			for(String s:parentFile.list()){
-				imagePath.add(parentFile.getAbsolutePath()+"\\"+s);
+			
+				/*當開啟第一張圖檔的同時  順便找出上一層的資料夾(parentfile)位置
+				 * 然後將同一個資料夾裡的圖檔的path一併存放在ArrayList裡
+				 * 之後要跳前後頁  就可以利用List裡的index來找出位置 
+				 */
+				File parentFile = new File(file.getParent());
+				parentName = parentFile.getName();
+				//foreach 將全部圖檔的path存在ArrayList
+				for(String s:parentFile.list()){
+					imagePath.add(parentFile.getAbsolutePath()+"\\"+s);
+				}
+				//左上顯示檔案來源及頁數
+				setTitle("圖像瀏覽器-"+parentName+"-"+file.getName());
 			}
 		}catch(Exception ee){
 				ee.toString();
@@ -191,15 +220,15 @@ public class MyACD extends JFrame{
 			g = image.getGraphics();
 			
 			//將影像寫入上面的區域
-			g.drawImage(srcImage, 0, 0, WIDTH, HEIGHT,null);
+			g.drawImage(srcImage, 0, 0, w, h,null);
 			
 			//設定視窗大小 
 			setSize(new Dimension(canvas.getWidth(), canvas.getHeight()));
 			
 			//扣下板機  畫出圖像
 			canvas.repaint();
-			//左上顯示頁數
-			setTitle("圖像瀏覽器-"+file.getName());
+			//左上顯示檔案來源及頁數
+			setTitle("圖像瀏覽器-"+parentName+"-"+file.getName());
 		}catch(Exception ee){
 			JOptionPane.showMessageDialog(null, "到盡頭了!");
 		}	
@@ -227,14 +256,14 @@ public class MyACD extends JFrame{
 			g = image.getGraphics();
 			
 			//將影像寫入上面的區域
-			g.drawImage(srcImage, 0, 0, WIDTH, HEIGHT,null);
+			g.drawImage(srcImage, 0, 0, w, h,null);
 			
 			//設定視窗大小 
 			setSize(new Dimension(canvas.getWidth(), canvas.getHeight()));
 			//扣板機  畫出圖像
 			canvas.repaint();
-			//左上顯示頁數
-			setTitle("圖像瀏覽器-"+file.getName());
+			//左上顯示檔案來源及頁數
+			setTitle("圖像瀏覽器-"+parentName+"-"+file.getName());
 		}catch(Exception ee){
 			JOptionPane.showMessageDialog(null, "到盡頭了!");
 		}
@@ -245,7 +274,7 @@ public class MyACD extends JFrame{
 		@Override
 		public void paint(Graphics g) {
 			//根據圖像的大小畫出
-			g.drawImage(image, 0, 0, w, h, null);
+			g.drawImage(image, (int)((canvas.getWidth()-w)/2), 0, w, h, null);
 		}
 	}
 	

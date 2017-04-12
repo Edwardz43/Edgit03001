@@ -3,7 +3,6 @@ package tw.org.iii.ed;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.SocketException;
 
 public class C40812 {
 
