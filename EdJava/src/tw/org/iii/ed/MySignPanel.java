@@ -54,7 +54,7 @@ public class MySignPanel extends JPanel{
 
 		//在這邊先暫定 背景淺灰色  筆畫黑色  粗細5
 		setBackground(Color.lightGray);
-		myColor =  Color.BLACK;
+		myColor =  null;
 		myStroke = 5;
 		
 	}
@@ -69,12 +69,12 @@ public class MySignPanel extends JPanel{
 		//所以不用foreach 改用傳統的for 
 		for(int j=0; j<lines.size(); j++){
 			//叫出線的顏色
-			HashMap<String, Color> cOl0 = color.get(j);
-			g2d.setColor(myColor= cOl0.get("color"));
+			HashMap<String, Color> cOL0 = color.get(j);
+			g2d.setColor(myColor= cOL0.get("color"));
 			
 			//叫出粗細
-			HashMap<String, Integer> sOl0 = stroke.get(j);
-			g2d.setStroke(new BasicStroke(myStroke = sOl0.get("stroke")));
+			HashMap<String, Integer> sOL0 = stroke.get(j);
+			g2d.setStroke(new BasicStroke(myStroke = sOL0.get("stroke")));
 			
 			//畫線
 			LinkedList<HashMap<String, Integer>> line = lines.get(j);
@@ -92,14 +92,24 @@ public class MySignPanel extends JPanel{
 	//變色
 	public void changeColor(){
 		myColor= JColorChooser.showDialog(this, "Select a Color :", Color.BLUE);
-		//System.out.println(myColor);
+		System.out.println("changeColor:"+myColor);
 		//測試用的
 	}
 	//變粗細
-	public void changeStroke() {
+	public void changeStroke(int n) {
 		//用JOP來輸入粗細  加個try/catch避免輸入錯誤
 		try{
-			myStroke = Integer.parseInt(JOptionPane.showInputDialog("輸入筆畫粗細 :"));
+			switch (n) {
+			case 3:
+				myStroke = 3;
+				break;
+			case 8:
+				myStroke = 8;
+				break;
+			case 12:
+				myStroke = 15;
+				break;				
+			}
 		}catch(Exception ee){
 			JOptionPane.showMessageDialog(null, "請輸入正確數字!");
 		}
@@ -133,7 +143,6 @@ public class MySignPanel extends JPanel{
 			repaint();
 		}
 	}
-	
 	//變背景顏色
 	public void changeBGC(Color bgc) {
 		setBackground(bgc);
@@ -178,7 +187,6 @@ public class MySignPanel extends JPanel{
 		}
 		lines = sign.get(0);recycle = sign.get(1);stroke = sign.get(2);color = sign.get(3);
 		repaint();
-		
 	}
 	
 	//很重要的來了  因為線的粗細跟顏色  是在你滑鼠按下的那一刻就決定了 
@@ -201,6 +209,7 @@ public class MySignPanel extends JPanel{
 			//紀錄線的顏色
 			HashMap<String, Color> colorOfLine = new HashMap<>();
 			colorOfLine.put("color", myColor);
+			//System.out.println("COL:"+myColor);測試用
 			color.add(colorOfLine);
 			
 			//紀錄線的粗細

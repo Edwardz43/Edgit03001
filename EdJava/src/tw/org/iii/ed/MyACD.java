@@ -15,9 +15,12 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriter;
+import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -38,12 +41,13 @@ public class MyACD extends JFrame{
 	BufferedImage image;
 	Graphics g ;
 	MyCanvas canvas;//重要的畫布
-	JButton open, exit, pre, next;
-	File file;
+	JButton open, exit, pre, next, save;
+	File readFile, saveFile;
 	JPanel bottom;
 	ArrayList<String> imagePath;//用來儲存檔案path
 	JScrollPane js;//圖像太大的話 設定視窗可以滾動
 	int w, h;//原始圖像的大小
+	Image srcImage;
 	String currentFile="";
 	String parentName="";
 	
@@ -131,8 +135,16 @@ public class MyACD extends JFrame{
 				}
 			}
 		});
+		save = new JButton("save");
+		save.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				saveFile();
+			}
+		});
+		
 		imagePath = new ArrayList<>();
-		bottom.add(open);bottom.add(pre);bottom.add(next);bottom.add(exit);
+		bottom.add(open);bottom.add(pre);bottom.add(next);bottom.add(exit);bottom.add(save);
 		add(bottom, BorderLayout.SOUTH);
 		
 		//防止圖檔過大  設置一個可滾動區域
@@ -149,6 +161,21 @@ public class MyACD extends JFrame{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		bottom.requestFocus();
 	}
+	protected void saveFile() {
+		try{
+			//用filechooser選擇開啟的檔案  預先設定path這樣方便下次開啟檔案
+			JFileChooser fc = new JFileChooser(currentFile);
+			int option = fc.showSaveDialog(null);
+			if(option == JFileChooser.APPROVE_OPTION){
+				saveFile = fc.getSelectedFile();
+				//將檔案轉成影像image
+				ImageIO.write(image, "bmp", saveFile);	
+			}
+		}catch(Exception ee){
+				ee.toString();
+		}
+		
+	}
 	//開啟檔案
 	public void open() {
 		try{
@@ -156,10 +183,10 @@ public class MyACD extends JFrame{
 			JFileChooser fc = new JFileChooser(currentFile);
 			int option = fc.showDialog(null, null);
 			if(option == JFileChooser.APPROVE_OPTION){
-				file = fc.getSelectedFile();
-				currentFile =file.getPath();
+				readFile = fc.getSelectedFile();
+				currentFile =readFile.getPath();
 				//將檔案轉成影像image
-				Image srcImage = ImageIO.read(file);
+				Image srcImage = ImageIO.read(readFile);
 				
 				//抓一下原圖檔的大小
 				w =srcImage.getWidth(null); h = srcImage.getHeight(null);
@@ -183,14 +210,14 @@ public class MyACD extends JFrame{
 				 * 然後將同一個資料夾裡的圖檔的path一併存放在ArrayList裡
 				 * 之後要跳前後頁  就可以利用List裡的index來找出位置 
 				 */
-				File parentFile = new File(file.getParent());
+				File parentFile = new File(readFile.getParent());
 				parentName = parentFile.getName();
 				//foreach 將全部圖檔的path存在ArrayList
 				for(String s:parentFile.list()){
 					imagePath.add(parentFile.getAbsolutePath()+"\\"+s);
 				}
 				//左上顯示檔案來源及頁數
-				setTitle("圖像瀏覽器-"+parentName+"-"+file.getName());
+				setTitle("圖像瀏覽器-"+parentName+"-"+readFile.getName());
 			}
 		}catch(Exception ee){
 				ee.toString();
@@ -201,15 +228,15 @@ public class MyACD extends JFrame{
 	protected void nextPage() {
 		try{
 			//尋找目前頁面的index
-			imagePath.indexOf(file.getAbsolutePath());
+			imagePath.indexOf(readFile.getAbsolutePath());
 			
 			//將index +1,找出下一頁的path 弄成string
-			String nPage = imagePath.get(imagePath.indexOf(file.getAbsolutePath())+1);
+			String nPage = imagePath.get(imagePath.indexOf(readFile.getAbsolutePath())+1);
 			//利用path找出下一頁的檔案
-			file = new File(nPage.toString());
+			readFile = new File(nPage.toString());
 			
 			//讀取下一頁的檔案  轉成image影像檔
-			Image srcImage = ImageIO.read(file);
+			srcImage = ImageIO.read(readFile);
 			
 			//抓出原圖的尺寸
 			w =srcImage.getWidth(null) ; h = srcImage.getHeight(null);
@@ -228,7 +255,7 @@ public class MyACD extends JFrame{
 			//扣下板機  畫出圖像
 			canvas.repaint();
 			//左上顯示檔案來源及頁數
-			setTitle("圖像瀏覽器-"+parentName+"-"+file.getName());
+			setTitle("圖像瀏覽器-"+parentName+"-"+readFile.getName());
 		}catch(Exception ee){
 			JOptionPane.showMessageDialog(null, "到盡頭了!");
 		}	
@@ -238,14 +265,14 @@ public class MyACD extends JFrame{
 	protected void prePage() throws IOException {
 		try{
 			//尋找目前頁面的index
-			imagePath.indexOf(file.getAbsolutePath());
+			imagePath.indexOf(readFile.getAbsolutePath());
 			
 			//將index -1  弄成string
-			String pPage = imagePath.get(imagePath.indexOf(file.getAbsolutePath())-1);
+			String pPage = imagePath.get(imagePath.indexOf(readFile.getAbsolutePath())-1);
 			
 			//找到上一頁的檔案所在位置  然後讀取原始圖檔
-			file = new File(pPage.toString());
-			Image srcImage = ImageIO.read(file);
+			readFile = new File(pPage.toString());
+			Image srcImage = ImageIO.read(readFile);
 			
 			//抓出原圖的尺寸
 			w =srcImage.getWidth(null) ; h = srcImage.getHeight(null);
@@ -263,7 +290,7 @@ public class MyACD extends JFrame{
 			//扣板機  畫出圖像
 			canvas.repaint();
 			//左上顯示檔案來源及頁數
-			setTitle("圖像瀏覽器-"+parentName+"-"+file.getName());
+			setTitle("圖像瀏覽器-"+parentName+"-"+readFile.getName());
 		}catch(Exception ee){
 			JOptionPane.showMessageDialog(null, "到盡頭了!");
 		}
