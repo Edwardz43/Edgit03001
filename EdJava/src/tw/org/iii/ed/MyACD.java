@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +14,8 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,23 +34,24 @@ import javax.swing.ScrollPaneConstants;
 /*
  * 4/6
  * 將課程內容:Jswing、IO 以圖像瀏覽器的形式實作
- * 可以讀取檔案  輸出圖像到視窗程式   
+ * 可以讀取檔案  輸出圖像到視窗程式    以及另存圖檔
  * 並且可切換上下頁  配合視窗縮放 
  */
 
 public class MyACD extends JFrame{
-	int WIDTH=1024;
-	int HEIGHT=768;
-	BufferedImage image;
-	Graphics g ;
+	//視窗預設大小
+	int WIDTH=800;
+	int HEIGHT=640;
+	BufferedImage bi;
+	Graphics2D g2d;
 	MyCanvas canvas;//重要的畫布
 	JButton open, exit, pre, next, save;
 	File readFile, saveFile;
 	JPanel bottom;
 	ArrayList<String> imagePath;//用來儲存檔案path
 	JScrollPane js;//圖像太大的話 設定視窗可以滾動
+	Image srcImage;//原始圖像
 	int w, h;//原始圖像的大小
-	Image srcImage;
 	String currentFile="";
 	String parentName="";
 	
@@ -58,7 +62,6 @@ public class MyACD extends JFrame{
 		//依序設定按鈕及功能
 		open = new JButton("開啟檔案");
 		open.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -71,8 +74,7 @@ public class MyACD extends JFrame{
 		});
 		
 		pre = new JButton("上一頁");
-		pre.addActionListener(new ActionListener() {
-			
+		pre.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -86,7 +88,6 @@ public class MyACD extends JFrame{
 		
 		next = new JButton("下一頁");
 		next.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				nextPage();
@@ -96,7 +97,6 @@ public class MyACD extends JFrame{
 		
 		exit = new JButton("離開");
 		exit.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -115,6 +115,7 @@ public class MyACD extends JFrame{
 				canvas.revalidate();
 		    }
 		});
+		
 		bottom = new JPanel();
 		bottom.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent ee){
@@ -135,7 +136,8 @@ public class MyACD extends JFrame{
 				}
 			}
 		});
-		save = new JButton("save");
+		
+		save = new JButton("另存圖片");
 		save.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -151,6 +153,17 @@ public class MyACD extends JFrame{
 		canvas = new MyCanvas();
 		js = new JScrollPane(canvas, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		
+		//尚待解決問題: 圖檔過大 需要滾動時  圖檔會出問題
+		js.addMouseWheelListener(new MouseWheelListener() {
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				//System.out.println(e);
+				canvas.repaint();
+				canvas.revalidate();
+			}
+		});
+		
 		add(js, FlowLayout.CENTER);
 		
 		//預設視窗大小
@@ -159,23 +172,27 @@ public class MyACD extends JFrame{
 		
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
+		//focus bottom  這樣就可以用左右鍵控制上下頁
 		bottom.requestFocus();
 	}
+	
+	//另存圖片
 	protected void saveFile() {
 		try{
-			//用filechooser選擇開啟的檔案  預先設定path這樣方便下次開啟檔案
 			JFileChooser fc = new JFileChooser(currentFile);
 			int option = fc.showSaveDialog(null);
 			if(option == JFileChooser.APPROVE_OPTION){
 				saveFile = fc.getSelectedFile();
-				//將檔案轉成影像image
-				ImageIO.write(image, "bmp", saveFile);	
+				//簡單一行  寫入 (目標影像, 格式, 目的地)
+				ImageIO.write(bi, "bmp", saveFile);	
 			}
 		}catch(Exception ee){
 				ee.toString();
 		}
 		
 	}
+	
 	//開啟檔案
 	public void open() {
 		try{
@@ -192,15 +209,15 @@ public class MyACD extends JFrame{
 				w =srcImage.getWidth(null); h = srcImage.getHeight(null);
 				
 				//預設一塊空白區域 可以容納image的size  
-				image = new BufferedImage(w, h,
+				bi = new BufferedImage(w, h,
 							BufferedImage.TYPE_INT_RGB);
-				g = image.getGraphics();
+				g2d = (Graphics2D)bi.getGraphics();
 				
 				//將影像寫入上面的區域
-				g.drawImage(srcImage, 0, 0, w, h,null);
+				g2d.drawImage(srcImage, 0, 0, w, h, null);
 				pack();
 					
-				//設定是窗大小 
+				//設定視窗大小 
 				setSize(new Dimension(canvas.getWidth(), canvas.getHeight()));
 					
 				//扣板機  畫出圖像
@@ -228,32 +245,31 @@ public class MyACD extends JFrame{
 	protected void nextPage() {
 		try{
 			//尋找目前頁面的index
-			imagePath.indexOf(readFile.getAbsolutePath());
-			
 			//將index +1,找出下一頁的path 弄成string
 			String nPage = imagePath.get(imagePath.indexOf(readFile.getAbsolutePath())+1);
 			//利用path找出下一頁的檔案
-			readFile = new File(nPage.toString());
+			readFile = new File(nPage);
 			
-			//讀取下一頁的檔案  轉成image影像檔
+			//讀取下一頁的檔案  轉成image影像檔 準備畫出
 			srcImage = ImageIO.read(readFile);
 			
-			//抓出原圖的尺寸
+			//先抓出原圖的尺寸
 			w =srcImage.getWidth(null) ; h = srcImage.getHeight(null);
 			
 			//預設一塊區域 可以容納image的size 
-			image = new BufferedImage(w, h,
+			bi = new BufferedImage(w, h,
 						BufferedImage.TYPE_INT_RGB);
-			g = image.getGraphics();
+			g2d = (Graphics2D)bi.getGraphics();
 			
 			//將影像寫入上面的區域
-			g.drawImage(srcImage, 0, 0, w, h,null);
+			g2d.drawImage(srcImage, 0, 0, w, h,null);
 			
 			//設定視窗大小 
 			setSize(new Dimension(canvas.getWidth(), canvas.getHeight()));
 			
 			//扣下板機  畫出圖像
 			canvas.repaint();
+			
 			//左上顯示檔案來源及頁數
 			setTitle("圖像瀏覽器-"+parentName+"-"+readFile.getName());
 		}catch(Exception ee){
@@ -264,31 +280,32 @@ public class MyACD extends JFrame{
 	//跳上一頁
 	protected void prePage() throws IOException {
 		try{
-			//尋找目前頁面的index
-			imagePath.indexOf(readFile.getAbsolutePath());
-			
+			//尋找目前頁面的index => imagePath.indexOf(readFile.getAbsolutePath())
 			//將index -1  弄成string
 			String pPage = imagePath.get(imagePath.indexOf(readFile.getAbsolutePath())-1);
 			
-			//找到上一頁的檔案所在位置  然後讀取原始圖檔
-			readFile = new File(pPage.toString());
-			Image srcImage = ImageIO.read(readFile);
+			//利用path找出上一頁的檔案
+			readFile = new File(pPage);
+			
+			//讀取上一頁的檔案  轉成image影像檔  準備畫出
+			srcImage = ImageIO.read(readFile);
 			
 			//抓出原圖的尺寸
 			w =srcImage.getWidth(null) ; h = srcImage.getHeight(null);
 			
 			//預設一塊空白區域 可以容納image的size 
-			image = new BufferedImage(w, h,
+			bi = new BufferedImage(w, h,
 						BufferedImage.TYPE_INT_RGB);
-			g = image.getGraphics();
+			g2d = (Graphics2D)bi.getGraphics();
 			
 			//將影像寫入上面的區域
-			g.drawImage(srcImage, 0, 0, w, h,null);
+			g2d.drawImage(srcImage, 0, 0, w, h,null);
 			
 			//設定視窗大小 
 			setSize(new Dimension(canvas.getWidth(), canvas.getHeight()));
 			//扣板機  畫出圖像
 			canvas.repaint();
+			
 			//左上顯示檔案來源及頁數
 			setTitle("圖像瀏覽器-"+parentName+"-"+readFile.getName());
 		}catch(Exception ee){
@@ -300,8 +317,9 @@ public class MyACD extends JFrame{
 	class MyCanvas extends Canvas{
 		@Override
 		public void paint(Graphics g) {
-			//根據圖像的大小畫出
-			g.drawImage(image, (int)((canvas.getWidth()-w)/2), 0, w, h, null);
+			//根據圖像的大小畫出  控制坐標的起點 讓圖片置中
+			Graphics2D g2d = (Graphics2D)g;
+			g2d.drawImage(bi, (int)((canvas.getWidth()-w)/2), (int)((canvas.getHeight()-h)/2), w, h, null);
 		}
 	}
 	
