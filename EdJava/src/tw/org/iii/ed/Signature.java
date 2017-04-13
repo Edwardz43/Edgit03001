@@ -1,9 +1,14 @@
 package tw.org.iii.ed;
 
 import java.awt.BasicStroke;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -17,12 +22,113 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class MySignPanel extends JPanel{
+@SuppressWarnings("serial")
+public class Signature extends JFrame{
+	private JButton clear, undo, redo, color, stroke, BGC, save, open, export;
+	private MySign msp;
+	
+	public Signature(){
+		super("Signature");
+		setLayout(new BorderLayout());
+		
+		clear= new JButton("清空");undo= new JButton("undo");redo= new JButton("redo");stroke= new JButton("粗細");
+		color =  new JButton("顏色");BGC= new JButton("背景顏色");save= new JButton("儲存");open= new JButton("開啟檔案");export= new JButton("輸出圖檔");
+		
+		JPanel top = new JPanel(new FlowLayout());
+		JPanel bottom = new JPanel(new FlowLayout());
+		
+		top.add(save);top.add(open);top.add(export);
+		bottom.add(clear);bottom.add(undo);bottom.add(redo);bottom.add(BGC);bottom.add(color);bottom.add(stroke);
+		
+		add(top, BorderLayout.NORTH); 
+		add(bottom, BorderLayout.SOUTH);
+		msp = new MySign(this);
+		add(msp, BorderLayout.CENTER);
+		
+		clear.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				msp.clear();
+			}
+		});
+		undo.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				msp.undo();
+			}
+		});
+		redo.addActionListener(new ActionListener() {	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				msp.redo();
+				
+			}
+		});
+		
+		//換顏色的按鈕
+		color.addActionListener(new ActionListener() {		
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				msp.changeColor();
+			}
+		});
+		
+		//換粗細的按鈕
+		stroke.addActionListener(new ActionListener() {	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				msp.changeStroke();
+			}
+		});
+		
+		//換背景顏色的按鈕
+		BGC.addActionListener(new ActionListener() {		
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Color bgc = JColorChooser.showDialog(Signature.this, "Select a Color :", Color.yellow);
+				msp.changeBGC(bgc);
+			}
+		});
+		
+		//儲存簽名
+		save.addActionListener(new ActionListener() {	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				msp.saveFile();
+			}
+		});
+		
+		//開啟舊檔
+		open.addActionListener(new ActionListener() {	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				msp.openFile();
+			}
+		});
+		
+		export.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				msp.exportFile();
+			}
+		});
+		
+		setSize(800, 600);
+		setVisible(true);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+	public static void main(String[] args) {
+		new Signature();
+	}
+}
+class MySign extends JPanel{
 	private LinkedList<LinkedList<HashMap<String, Integer>>> lines, recycle;
 	
 	//每條線都有顏色與筆畫粗細  所以用HashMap存放很適合 
@@ -36,7 +142,7 @@ public class MySignPanel extends JPanel{
 	private Color myColor;
 	private int myStroke;
 	
-	public MySignPanel(DigitalSign ds){
+	public MySign(Signature ds){
 		
 		MyMouseListener listener = new MyMouseListener();
 		addMouseListener(listener);
@@ -56,7 +162,7 @@ public class MySignPanel extends JPanel{
 
 		//在這邊先暫定 背景淺灰色  筆畫黑色  粗細5
 		setBackground(Color.lightGray);
-		myColor =  null;
+		myColor =  Color.BLACK;
 		myStroke = 5;
 		
 	}
@@ -71,12 +177,12 @@ public class MySignPanel extends JPanel{
 		//所以不用foreach 改用傳統的for 
 		for(int j=0; j<lines.size(); j++){
 			//叫出線的顏色
-			HashMap<String, Color> cOL0 = color.get(j);
-			g2d.setColor(myColor= cOL0.get("color"));
+			HashMap<String, Color> cOl0 = color.get(j);
+			g2d.setColor(myColor= cOl0.get("color"));
 			
 			//叫出粗細
-			HashMap<String, Integer> sOL0 = stroke.get(j);
-			g2d.setStroke(new BasicStroke(myStroke = sOL0.get("stroke")));
+			HashMap<String, Integer> sOl0 = stroke.get(j);
+			g2d.setStroke(new BasicStroke(myStroke = sOl0.get("stroke")));
 			
 			//畫線
 			LinkedList<HashMap<String, Integer>> line = lines.get(j);
@@ -94,24 +200,14 @@ public class MySignPanel extends JPanel{
 	//變色
 	public void changeColor(){
 		myColor= JColorChooser.showDialog(this, "Select a Color :", Color.BLUE);
-		System.out.println("changeColor:"+myColor);
+		//System.out.println(myColor);
 		//測試用的
 	}
 	//變粗細
-	public void changeStroke(int n) {
+	public void changeStroke() {
 		//用JOP來輸入粗細  加個try/catch避免輸入錯誤
 		try{
-			switch (n) {
-			case 3:
-				myStroke = 3;
-				break;
-			case 8:
-				myStroke = 8;
-				break;
-			case 12:
-				myStroke = 15;
-				break;				
-			}
+			myStroke = Integer.parseInt(JOptionPane.showInputDialog("輸入筆畫粗細 :"));
 		}catch(Exception ee){
 			JOptionPane.showMessageDialog(null, "請輸入正確數字!");
 		}
@@ -145,6 +241,7 @@ public class MySignPanel extends JPanel{
 			repaint();
 		}
 	}
+	
 	//變背景顏色
 	public void changeBGC(Color bgc) {
 		setBackground(bgc);
@@ -189,16 +286,16 @@ public class MySignPanel extends JPanel{
 		}
 		lines = sign.get(0);recycle = sign.get(1);stroke = sign.get(2);color = sign.get(3);
 		repaint();
+		
 	}
-	
-	//輸出圖檔
+	//新增功能:輸出程圖檔
 	protected void exportFile() {
 		try{
 			JFileChooser fc = new JFileChooser("./dir2");
 			int option = fc.showSaveDialog(null);
 			if(option == JFileChooser.APPROVE_OPTION){
 				File saveFile = fc.getSelectedFile();
-				// 寫入 (目標影像, 格式, 目的地)
+				//簡單一行  寫入 (目標影像, 格式, 目的地)
 				BufferedImage bi = new BufferedImage(this.getWidth(), this.getHeight(),BufferedImage.TYPE_INT_RGB);
 				Graphics2D g2d = (Graphics2D)bi.getGraphics();
 				this.paintAll(g2d);
@@ -229,7 +326,6 @@ public class MySignPanel extends JPanel{
 			//紀錄線的顏色
 			HashMap<String, Color> colorOfLine = new HashMap<>();
 			colorOfLine.put("color", myColor);
-			//System.out.println("COL:"+myColor);測試用
 			color.add(colorOfLine);
 			
 			//紀錄線的粗細
@@ -249,3 +345,5 @@ public class MySignPanel extends JPanel{
 		}
 	}	
 }
+
+

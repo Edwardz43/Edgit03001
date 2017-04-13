@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 public class DigitalSign extends JFrame{
-	private JButton clear, undo, redo, color, BGC, save, open;
+	private JButton clear, undo, redo, color, BGC, save, open, export;
 	// 4/13 新增JRadioButton 選擇筆畫粗細
 	private JRadioButton small, mid, big;
 	private MySignPanel msp;
@@ -23,21 +23,23 @@ public class DigitalSign extends JFrame{
 		setLayout(new BorderLayout());
 		
 		clear= new JButton("清空");undo= new JButton("undo");redo= new JButton("redo");small = new JRadioButton("細");
-		color =  new JButton("顏色");BGC= new JButton("背景顏色");save= new JButton("儲存");open= new JButton("開啟檔案");
+		color =  new JButton("顏色");BGC= new JButton("背景顏色");save= new JButton("儲存");open= new JButton("開啟檔案");export= new JButton("輸出圖檔");
 		//JRadioButton
 		mid = new JRadioButton("中");big = new JRadioButton("粗");
 		
+		JPanel top = new JPanel(new FlowLayout());
 		JPanel bottom = new JPanel(new FlowLayout());
 		
+		top.add(save);top.add(open);top.add(export);
 		bottom.add(clear);bottom.add(undo);bottom.add(redo);bottom.add(BGC);bottom.add(color);
 		//
 		bottom.add(small);bottom.add(mid);bottom.add(big);
 		
-		bottom.add(save);bottom.add(open);
 		//把JRadioButton 放在同一個group 這樣才可以一次只按一個鈕
 		ButtonGroup bg = new ButtonGroup();
 		bg.add(small);bg.add(mid);bg.add(big);
 		
+		add(top, BorderLayout.NORTH);
 		add(bottom, BorderLayout.SOUTH);
 		msp = new MySignPanel(this);
 		add(msp, BorderLayout.CENTER);
@@ -113,6 +115,14 @@ public class DigitalSign extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				msp.openFile();
+			}
+		});
+		
+		//輸出圖檔
+		export.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				msp.exportFile();
 			}
 		});
 		

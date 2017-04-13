@@ -189,8 +189,7 @@ public class MyACD extends JFrame{
 			}
 		}catch(Exception ee){
 				ee.toString();
-		}
-		
+		}	
 	}
 	
 	//開啟檔案
