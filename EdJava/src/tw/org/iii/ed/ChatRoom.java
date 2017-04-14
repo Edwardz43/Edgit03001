@@ -11,15 +11,18 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -32,10 +35,13 @@ public class ChatRoom extends JFrame{
 	JPanel top, bottom, sidebar1, sidebar2;
 	JTextField tf;
 	JTextArea ta;
-	JButton input;
+	JButton input, connect;
 	JScrollPane sp;
 	ArrayList<String> recycle;
+	String onScreen;
+	String ip;
 	int line;
+	
 	public ChatRoom (){
 		super("ChatRoom");
 		setLayout(new BorderLayout());
@@ -74,17 +80,22 @@ public class ChatRoom extends JFrame{
 		tf.addMouseListener(listener);
 		tf.addKeyListener(keyListener);
 		
-		//設定按鈕功能
+		//設定按鈕功能  視用lambda與法
 		input= new JButton("輸入");
-		input.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				senInput();
-			}
+		input.addActionListener(e -> {
+			senInput();
 		});
+		
+		//連接
+		connect= new JButton("連接");
+		connect.addActionListener(e ->{
+			connect();
+		});
+		
 		
 		bottom.add(tf);
 		bottom.add(input);
+		bottom.add(connect);
 		
 		add(top, BorderLayout.NORTH);
 		add(sp, BorderLayout.CENTER);
@@ -103,6 +114,35 @@ public class ChatRoom extends JFrame{
 		//接收訊息  基本上是無限迴圈
 		receive();
 	}
+	private void connect() {
+		try {
+			ip = JOptionPane.showInputDialog("請輸入連接端的IP:");
+			//檢查ip是否符合IPv4
+			if(ip.matches("^(([2][0-4][0-9]|[2][5][0-5]|[01]?[0-9]?[0-9])[.]){3}([2][0-4][\\d]|[2][5][0-5]|[01]?[\\d][\\d]?)$")){
+				String test = "";
+			
+				//嘗試連接對方
+				Socket socket = new Socket(InetAddress.getByName(ip), 9999);
+				OutputStream out = socket.getOutputStream();
+				out.write(test.getBytes());
+				out.flush();
+				out.close();	
+				socket.close();
+				
+				//若連接成功  印出訊息
+				//ta.setForeground(Color.red);
+				ta.setText(ta.getText()+"開始聊天!\n");
+			
+			}else{
+				JOptionPane.showMessageDialog(null, "請輸入正確IP格式!");
+			}
+		} catch (Exception e) {
+			//失敗  印出錯誤訊息
+			JOptionPane.showMessageDialog(null, e.getMessage());	
+		}
+	}
+	
+	
 	//接收訊息  基本上都是上課的內容  
 	private void receive() {
 		for(;;){
@@ -124,7 +164,7 @@ public class ChatRoom extends JFrame{
 				server.close();
 				//System.out.println("ok");
 			} catch (Exception e) {
-				System.out.println(e.toString());
+				ta.setText(ta.getText()+e.toString()+"\n");
 			}
 		}	
 	}
@@ -134,9 +174,12 @@ public class ChatRoom extends JFrame{
 		try {
 			//先擷取textfield的內容  準備送出去
 			String input = tf.getText();
+			//將自己輸入的內容印在銀幕上
+			ta.setText(ta.getText()+input+"\n");
+			//System.out.println(input);
 			
 			//傳給自己測試
-			Socket socket = new Socket(InetAddress.getByName("127.0.0.1"), 9999);
+			Socket socket = new Socket(InetAddress.getByName(ip), 9999);
 				
 			OutputStream out = socket.getOutputStream();
 			out.write(input.getBytes());
@@ -152,7 +195,7 @@ public class ChatRoom extends JFrame{
 			tf.setText("");
 			
 		} catch (Exception e) {
-			System.out.println(e.toString());
+			ta.setText(ta.getText()+e.toString()+"\n");
 		}
 	}
 	
