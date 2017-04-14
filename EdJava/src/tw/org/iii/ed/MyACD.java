@@ -18,12 +18,9 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
-import javax.imageio.ImageWriter;
-import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -36,6 +33,8 @@ import javax.swing.ScrollPaneConstants;
  * 將課程內容:Jswing、IO 以圖像瀏覽器的形式實作
  * 可以讀取檔案  輸出圖像到視窗程式    以及另存圖檔
  * 並且可切換上下頁  配合視窗縮放 
+ * 4/14
+ * 新增圖檔另存圖檔功能
  */
 
 public class MyACD extends JFrame{
@@ -154,7 +153,7 @@ public class MyACD extends JFrame{
 		js = new JScrollPane(canvas, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
-		//尚待解決問題: 圖檔過大 需要滾動時  圖檔會出問題
+		//尚待解決問題: 圖檔過大 需要滾動時  圖檔讀取會出問題
 		js.addMouseWheelListener(new MouseWheelListener() {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
