@@ -20,7 +20,7 @@ public class MyPool extends JPanel{
 	
 	public MyPool(){
 		timer = new Timer();
-		timer.schedule(new ViewTask(),0, 60);
+		timer.schedule(new ViewTask(),0, 10);
 		balls = new LinkedList<>();
 		addMouseListener(new MyMouseAdapter());
 	}
@@ -29,7 +29,7 @@ public class MyPool extends JPanel{
 		public void mousePressed(MouseEvent e) {
 			Ball ball = new Ball(e.getX(), e.getY());
 			balls.add(ball);
-			timer.schedule(ball,1000, (int)(30 + Math.random()*70));
+			timer.schedule(ball,1000, (int)(30 + Math.random()*30));
 		}
 	}
 	
@@ -52,21 +52,21 @@ public class MyPool extends JPanel{
 		g2d.setColor(Color.yellow);
 		
 		for(Ball ball : balls){
-			g2d.fillOval(ball.x, ball.y, 40, 40);
+			g2d.fillOval(ball.x, ball.y, 10, 10);
 		}
 	}
 	
 	private class Ball extends TimerTask{
 		int x, y, dx, dy;
 		Ball(int x, int y){
-			this.x = x; this.y = y;dx = dy =10;
+			this.x = x; this.y = y; dx = dy = 10;
 		}
 		@Override
 		public void run() {
-			if(x < 0 || x + 40 > viewW){
+			if(x < 0 || x + 10 > viewW){
 				dx *= -1;
 			}
-			if(y < 0 || y + 40 > viewH){
+			if(y < 0 || y + 10 > viewH){	
 				dy *= -1;
 			}
 			
