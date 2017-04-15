@@ -22,6 +22,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+
+// * UI/UX
+// * 核心功能
 public class MySignPanel extends JPanel{
 	private LinkedList<LinkedList<HashMap<String, Integer>>> lines, recycle;
 	
