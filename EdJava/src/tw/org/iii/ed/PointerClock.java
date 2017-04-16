@@ -2,6 +2,7 @@ package tw.org.iii.ed;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.Calendar;
@@ -45,7 +46,7 @@ public class PointerClock extends JPanel{
 		viewW = getWidth()/2; viewH = getHeight()/2;
 		
 		//背景色
-		g2d.setColor(Color.gray);
+		g2d.setColor(Color.lightGray);
 		//填滿 記得*2
 		g2d.fillRect(0, 0, viewW*2, viewH*2);
 		
@@ -53,11 +54,11 @@ public class PointerClock extends JPanel{
 		g2d.setStroke(new BasicStroke(15));
 		g2d.setColor(Color.black);
 		//圓心位置要置中  半徑就和長的一半相等
-		g2d.drawOval(viewW-viewW/2, viewH-viewW/2, viewW, viewW);
+		g2d.drawOval((int)(viewW-viewW/2), (int)(viewH-viewW/2), viewW, viewW);
 		
 		//畫刻度
-		g2d.setStroke(new BasicStroke(10));
-		g2d.setColor(Color.black);
+		g2d.setStroke(new BasicStroke(3));
+//		g2d.setColor(Color.black);
 		
 		//主要的技巧和指針一樣  每6度就畫一個  長度我是選擇10
 		for(int i=0; i<60; i++){
@@ -72,9 +73,11 @@ public class PointerClock extends JPanel{
 		}
 		
 		//畫數字
+		g2d.setFont(new Font(null, Font.ITALIC, 18));
 		g2d.setColor(Color.MAGENTA);
 		for(int i=0; i<12; i++){
-			g2d.drawString(number[i], cosPointer(i*5, viewW/2-40), sinPointer(i*5, viewW/2-40));
+			//微調位置  讓數字跟刻度對齊
+			g2d.drawString(number[i], cosPointer(i*5, viewW/2-40)-9, sinPointer(i*5, viewW/2-40)+7);
 		}
 		
 		//秒針
@@ -90,7 +93,7 @@ public class PointerClock extends JPanel{
 		//時針
 		g2d.setStroke(new BasicStroke(8));
 		g2d.setColor(Color.green);
-		g2d.drawLine(viewW, viewH, cosPointer(hh*5, viewW/5), sinPointer(hh*5, viewW/5));	
+		g2d.drawLine(viewW, viewH, cosPointer((int)(hh*5+mm*0.5/6), viewW/5), sinPointer((int)(hh*5+mm*0.5/6), viewW/5));	
 	}
 	
 	/*設兩個方法  輸入時間(n) 半徑(r)  就可以回傳指針移動的軌跡(x, y)
