@@ -9,7 +9,9 @@ import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JButton;
@@ -90,7 +92,7 @@ class deskCalendar extends JLabel{
 		jp.add(Month);jp.add(Day);
 		new BorderLayout();
 		add(jp, BorderLayout.NORTH);
-		textarea.setBackground(Color.CYAN);
+		textarea.setBackground(new Color(224, 220, 220));
 		textarea.setLineWrap(true);
 		textarea.setFont(new Font("微軟正黑體", Font.ROMAN_BASELINE, 16));
 		
@@ -175,7 +177,7 @@ class deskCalendar extends JLabel{
 		int w = week(y,m,1);
 		int d = setDays(y,m);
 		
-		textarea.append(y+"年"+m+"月\n");
+		textarea.append(y+"年"+m+"月"+date+"日\t");
 		textarea.append("\n");
 		String[] week = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
 		for(String v :week){
@@ -239,7 +241,7 @@ class AnalogyClock extends JPanel{
 		viewW = getWidth()/2; viewH = getHeight()/2;
 		
 		//背景色
-		g2d.setColor(Color.CYAN);
+		g2d.setColor(new Color(224, 220, 220));
 		//填滿 記得*2
 		g2d.fillRect(0, 0, viewW*2, viewH*2);
 		
@@ -312,7 +314,9 @@ class AnalogyClock extends JPanel{
 			ss = now.get(Calendar.SECOND);
 			//設定數位時鐘
 			top.setFont(new Font(null, Font.ITALIC, 28));
-			top.setText(hh+":"+ mm+":"+ss);
+			SimpleDateFormat sdFormat = new SimpleDateFormat("a hh:mm:ss");
+			Date current = new Date();
+			top.setText(sdFormat.format(current));
 			repaint();
 		}
 	}
