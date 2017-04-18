@@ -2,7 +2,6 @@ package tw.org.iii.ed;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,36 +10,44 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
 
-//聊天程式 v1.0
-//目前就先跟自己聊天
+/*聊天程式 v1.1
+ * 新增:
+ * 1. 可輸入連線IP
+ * 2. TextArea => TextPane 可更改文字顏色
+ */ 
 public class ChatRoom extends JFrame{
-	JPanel top, bottom, sidebar1, sidebar2;
-	JTextField tf;
-	JTextArea ta;
-	JButton input, connect;
-	JScrollPane sp;
-	ArrayList<String> recycle;
-	String onScreen;
-	String ip;
-	int line;
+	private JPanel top, bottom, sidebar1, sidebar2;
+	private JTextField tf;
+	private JTextPane ta;
+	private JButton input, connect, changeColor;
+	private JScrollPane sp;
+	private ArrayList<String> recycle;
+	private ArrayList<Color> color;
+	private String onScreen;
+	private String ip;
+	private Color mycolor;
+	private int line;
 	
 	public ChatRoom (){
 		super("ChatRoom");
@@ -52,9 +59,9 @@ public class ChatRoom extends JFrame{
 		top.add(label);
 		
 		//中間的主角 聊天的內容
-		ta = new JTextArea("Welcome to ChatRoom v1.0\n");
+		ta = new JTextPane();
 		//設定不能輸入  只供觀看
-		ta.setEditable(false);
+		//ta.setEditable(false);
 		//BGC
 		ta.setBackground(Color.cyan);
 		//顯示字體跟大小
@@ -92,10 +99,16 @@ public class ChatRoom extends JFrame{
 			connect();
 		});
 		
+		changeColor = new JButton("選擇顏色");
+		changeColor.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				changeColor();
+			}
+		});
 		
-		bottom.add(tf);
-		bottom.add(input);
-		bottom.add(connect);
+		
+		bottom.add(tf);bottom.add(input);bottom.add(connect);bottom.add(changeColor);
 		
 		add(top, BorderLayout.NORTH);
 		add(sp, BorderLayout.CENTER);
@@ -110,9 +123,12 @@ public class ChatRoom extends JFrame{
 		//加入一個資源回收桶  收集之前輸入過的內容 等等會用到
 		//因為無法預期大小 所以用list
 		recycle = new ArrayList<String>(); 
-		
+		color = new ArrayList<Color>();
 		//接收訊息  基本上是無限迴圈
 		receive();
+	}
+	protected void changeColor() {
+		mycolor = new JColorChooser().showDialog(this, "選擇顏色", Color.black);
 	}
 	private void connect() {
 		try {
@@ -158,7 +174,8 @@ public class ChatRoom extends JFrame{
 				while((line = br.readLine()) != null){
 					//將接收到的訊息以String顯示在textarea上 
 					//因為要保留舊的內容  所以新的內容(line)要接在原有內容(ta.getText)後面
-					ta.setText(ta.getText()+line+"\n");
+					appendToPane(ta,line+"\n",mycolor);
+					//ta.setText(ta.getText()+line+"\n");
 				}
 				br.close();
 				server.close();
@@ -175,7 +192,8 @@ public class ChatRoom extends JFrame{
 			//先擷取textfield的內容  準備送出去
 			String input = tf.getText();
 			//將自己輸入的內容印在銀幕上
-			ta.setText(ta.getText()+input+"\n");
+			appendToPane(ta,input+"\n",mycolor);
+			//ta.setText(ta.getText()+input+"\n");
 			//System.out.println(input);
 			
 			//傳給自己測試
@@ -233,6 +251,19 @@ public class ChatRoom extends JFrame{
 			}
 		}		
 	}
+	
+	private void appendToPane(JTextPane ta, String msg, Color c) {
+		StyleContext sc = StyleContext.getDefaultStyleContext();
+        AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);
+
+        aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Lucida Console");
+        aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);
+
+        int len = ta.getDocument().getLength();
+        ta.setCaretPosition(len);
+        ta.setCharacterAttributes(aset, false);
+        ta.replaceSelection(msg);
+    }
 	
 	public static void main(String[] args) {
 		new ChatRoom(); 

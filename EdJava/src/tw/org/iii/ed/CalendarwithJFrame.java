@@ -7,36 +7,42 @@ import java.awt.Font;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 
-public class CalendarwithJFrame extends JFrame{
+public class CalendarwithJFrame extends JLabel{
 	int y, m, d;
-	JButton Year, Month, Day;
-	JTextArea textarea;	
+	private JButton Year, Month, Day;
+	private JTextArea textarea;	
+	
 	public CalendarwithJFrame(){
 		super("萬年曆");
 		setLayout(new BorderLayout());		
 		JPanel jp = new JPanel();
-		
-		Year = new JButton("年曆");
-		Year.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				textarea.setText("");
-				try{
-					y = Integer.parseInt(JOptionPane.showInputDialog("輸入年分 :"));
-					yearCalendar(y);
-				}catch(Exception ee){
-					JOptionPane.showMessageDialog(null, "請重新輸入!");
-				}
-			}
-		});
+		Calendar c = Calendar.getInstance();
+		y = c.get(c.YEAR); m=c.get(c.MONTH)+1;d = c.get(c.DATE);
+		System.out.println("y:"+y+",m :"+m+", d :"+d);
+//		Year = new JButton("年曆");
+//		Year.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				textarea.setText("");
+//				try{
+//					y = Integer.parseInt(JOptionPane.showInputDialog("輸入年分 :"));
+//					yearCalendar(y);
+//				}catch(Exception ee){
+//					JOptionPane.showMessageDialog(null, "請重新輸入!");
+//				}
+//			}
+//		});
 		
 		Month = new JButton("月曆");	
 		Month.addActionListener(new ActionListener() {
@@ -72,16 +78,19 @@ public class CalendarwithJFrame extends JFrame{
 		});
 		
 		textarea = new JTextArea();			
-		jp.add(Year); jp.add(Month);jp.add(Day);
+		//jp.add(Year); 
+		jp.add(Month);jp.add(Day);
 		add(jp, new BorderLayout().NORTH);
 		textarea.setBackground(Color.LIGHT_GRAY);
 		textarea.setLineWrap(true);
 		textarea.setFont(new Font("微軟正黑體", Font.ROMAN_BASELINE, 16));
 		JScrollPane span = new JScrollPane(textarea, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		
+		dayCalendar(y, m, d);
+		
 		add(span, new BorderLayout().CENTER);
 		setVisible(true);
 		setSize(800, 640);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	
 	static int week(int y, int m, int d){
@@ -118,44 +127,44 @@ public class CalendarwithJFrame extends JFrame{
 	    return false;
 	}
 
-	public void yearCalendar(int y){
-		textarea.append("列印年份: "+y+"\n");
-		for(int k=1;k<13;k++){
-			int w = week(y,k,1);
-			int d = setDays(y,k);
-			textarea.append(k+"月\n");
-			textarea.append("\n");
-			String[] week = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
-			for(String v :week){
-				textarea.append(v+"\t");
-			}
-			textarea.append("\n");
-			int[][] calendar = new int[6][7];
-			int[] setCalendar = new int[42];
-			for(int i=0;i<d;i++){
-				setCalendar[w+i]=1;
-			}
-			
-			for(int i=0; i<setCalendar.length; i++){
-				calendar[i/7][i%7]=setCalendar[i];
-			}
-			
-			int days = 1;
-			for(int i=0;i<6;i++){
-				for(int j=0;j<7;j++){
-					if(calendar[i][j] == 0){
-						textarea.append("\t");
-					}else if(days<10){
-						textarea.append("  "+(days++)+"\t");
-					}else{
-						textarea.append(" "+(days++)+"\t");
-					}
-				}
-				textarea.append("\n");
-			}
-			textarea.append("\n");
-		}
-	}	
+//	public void yearCalendar(int y){
+//		textarea.append("列印年份: "+y+"\n");
+//		for(int k=1;k<13;k++){
+//			int w = week(y,k,1);
+//			int d = setDays(y,k);
+//			textarea.append(k+"月\n");
+//			textarea.append("\n");
+//			String[] week = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
+//			for(String v :week){
+//				textarea.append(v+"\t");
+//			}
+//			textarea.append("\n");
+//			int[][] calendar = new int[6][7];
+//			int[] setCalendar = new int[42];
+//			for(int i=0;i<d;i++){
+//				setCalendar[w+i]=1;
+//			}
+//			
+//			for(int i=0; i<setCalendar.length; i++){
+//				calendar[i/7][i%7]=setCalendar[i];
+//			}
+//			
+//			int days = 1;
+//			for(int i=0;i<6;i++){
+//				for(int j=0;j<7;j++){
+//					if(calendar[i][j] == 0){
+//						textarea.append("\t");
+//					}else if(days<10){
+//						textarea.append("  "+(days++)+"\t");
+//					}else{
+//						textarea.append(" "+(days++)+"\t");
+//					}
+//				}
+//				textarea.append("\n");
+//			}
+//			textarea.append("\n");
+//		}
+//	}	
 
 	public void monthCalendar(int y, int m){
 		int w = week(y,m,1);
@@ -222,7 +231,7 @@ public class CalendarwithJFrame extends JFrame{
 				}else if(days<10){
 					textarea.append((days==date)?" *"+(days++)+"\t":"  "+(days++)+"\t");
 				}else{
-					if(days==date)textarea.append("*");
+					//if(days==date)textarea.append("*");
 					textarea.append((days==date)?"*"+(days++)+"\t":" "+(days++)+"\t");
 				}
 			}
