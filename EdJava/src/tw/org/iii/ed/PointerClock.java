@@ -30,8 +30,7 @@ public class PointerClock extends JPanel{
 	private int halfW, halfH;
 	private int hh, mm, ss, sss;
 	private JLabel digiClock;
-	String number[] = { "\u2169\u2161", "\u2160", "\u2161", "\u2162", "\u2163", "\u2164", "\u2165",
-			"\u2166", "\u2167", "\u2168", "\u2169", "\u2169\u2160" };
+	String number[] = { "12", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11" };
 	
 	public PointerClock(){
 		setLayout(new BorderLayout());
@@ -151,7 +150,7 @@ public class PointerClock extends JPanel{
 	//秀出時鐘
 	public static void main(String[] args){
 		JFrame frame = new JFrame("Clock");
-		Clock2 clock = new Clock2();
+		PointerClock clock = new PointerClock();
 		frame.add(clock);
 		frame.setVisible(true);
 		frame.setSize(320, 240);
