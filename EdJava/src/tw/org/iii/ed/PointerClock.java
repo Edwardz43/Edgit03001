@@ -94,7 +94,7 @@ public class PointerClock extends JPanel{
 		
 		// 4/18:加上時分秒移動量   讓移動效果明顯
 		//時針
-		g2d.setStroke(new BasicStroke(8));
+		g2d.setStroke(new BasicStroke(6));
 		g2d.setColor(Color.green);
 		g2d.drawLine(halfW, halfH, cosPointer((hh+mm/60.0)*50, halfW*0.2), sinPointer((hh+mm/60.0)*50, halfW*0.2));	
 		
