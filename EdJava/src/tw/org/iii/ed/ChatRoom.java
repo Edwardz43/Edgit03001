@@ -120,7 +120,8 @@ public class ChatRoom extends JFrame{
 		
 		//加入一個資源回收桶  收集之前輸入過的內容 等等會用到
 		//因為無法預期大小 所以用list
-		recycle = new ArrayList<String>(); 
+		recycle = new ArrayList<String>();
+		mycolor = Color.BLACK;
 		//接收訊息  基本上是無限迴圈
 		receive();
 	}
@@ -133,9 +134,9 @@ public class ChatRoom extends JFrame{
 			//檢查ip是否符合IPv4
 			if(ip.matches("^(([2][0-4][0-9]|[2][5][0-5]|[01]?[0-9]?[0-9])[.]){3}([2][0-4][\\d]|[2][5][0-5]|[01]?[\\d][\\d]?)$")){
 				String test = "";
-			
+				
 				//嘗試連接對方
-				Socket socket = new Socket(InetAddress.getByName(ip), 9999);
+				Socket socket = new Socket(InetAddress.getByName(ip), 1234);
 				OutputStream out = socket.getOutputStream();
 				out.write(test.getBytes());
 				out.flush();
@@ -160,7 +161,7 @@ public class ChatRoom extends JFrame{
 	private void receive() {
 		for(;;){
 			try {
-				ServerSocket server = new ServerSocket(9999);
+				ServerSocket server = new ServerSocket(1234);
 				
 				Socket socket = server.accept();
 				//System.out.println(socket.getInetAddress().getHostAddress());
@@ -192,14 +193,13 @@ public class ChatRoom extends JFrame{
 			appendToPane(ta,input,mycolor);
 			
 			//取得對方IP
-			Socket socket = new Socket(InetAddress.getByName(ip), 9999);
-				
+			Socket socket = new Socket(InetAddress.getByName(ip), 1234);
 			OutputStream out = socket.getOutputStream();
 			out.write(input.getBytes());
 			out.flush();
 			out.close();	
 			socket.close();
-			
+
 			//每當有新的內容輸入  就複製一份在資源回收桶
 			recycle.add(input);
 			//設定一個int = index,  相當於資源回收桶的大小-1(index從0開始)

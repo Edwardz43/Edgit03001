@@ -2,7 +2,7 @@ package tw.org.iii.ed;
 
 public class FindNumbersDisappeared{
 	public static void main(String[] args){
-		int[] input = new int[]{4,3,2,7,8,2,3,1};
+		int[] input = new int[]{5,3,2,5,8,2,2,1};
 		disPear(input);
 	}
 	static void disPear(int[] input){
