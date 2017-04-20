@@ -43,8 +43,6 @@ public class ChatRoom extends JFrame{
 	private JButton input, connect, changeColor;
 	private JScrollPane sp;
 	private ArrayList<String> recycle;
-	private ArrayList<Color> color;
-	private String onScreen;
 	private String ip;
 	private Color mycolor;
 	private int line;
@@ -123,7 +121,6 @@ public class ChatRoom extends JFrame{
 		//加入一個資源回收桶  收集之前輸入過的內容 等等會用到
 		//因為無法預期大小 所以用list
 		recycle = new ArrayList<String>(); 
-		color = new ArrayList<Color>();
 		//接收訊息  基本上是無限迴圈
 		receive();
 	}
@@ -174,14 +171,14 @@ public class ChatRoom extends JFrame{
 				while((line = br.readLine()) != null){
 					//將接收到的訊息以String顯示在textarea上 
 					//因為要保留舊的內容  所以新的內容(line)要接在原有內容(ta.getText)後面
-					appendToPane(ta,line+"\n",mycolor);
+					appendToPane(ta,line,mycolor);
 					//ta.setText(ta.getText()+line+"\n");
 				}
 				br.close();
 				server.close();
 				//System.out.println("ok");
 			} catch (Exception e) {
-				ta.setText(ta.getText()+e.toString()+"\n");
+				appendToPane(ta,e.toString(),Color.RED);
 			}
 		}	
 	}
@@ -192,11 +189,9 @@ public class ChatRoom extends JFrame{
 			//先擷取textfield的內容  準備送出去
 			String input = tf.getText();
 			//將自己輸入的內容印在銀幕上
-			appendToPane(ta,input+"\n",mycolor);
-			//ta.setText(ta.getText()+input+"\n");
-			//System.out.println(input);
+			appendToPane(ta,input,mycolor);
 			
-			//傳給自己測試
+			//取得對方IP
 			Socket socket = new Socket(InetAddress.getByName(ip), 9999);
 				
 			OutputStream out = socket.getOutputStream();
@@ -213,7 +208,7 @@ public class ChatRoom extends JFrame{
 			tf.setText("");
 			
 		} catch (Exception e) {
-			ta.setText(ta.getText()+e.toString()+"\n");
+			appendToPane(ta,e.toString(),Color.RED);
 		}
 	}
 	
@@ -262,7 +257,7 @@ public class ChatRoom extends JFrame{
         int len = ta.getDocument().getLength();
         ta.setCaretPosition(len);
         ta.setCharacterAttributes(aset, false);
-        ta.replaceSelection(msg);
+        ta.replaceSelection(msg+"\n");
     }
 	
 	public static void main(String[] args) {
