@@ -17,10 +17,10 @@ import javax.swing.JPanel;
 
 
 public class homework8  extends JFrame{
-	private MyPool2 mypool; 
+	private MyClock2 mypool; 
 	homework8(){
 		setLayout(new BorderLayout());
-		mypool=new MyPool2();
+		mypool=new MyClock2();
 
 		add(mypool,BorderLayout.CENTER);
 		
@@ -37,7 +37,7 @@ public class homework8  extends JFrame{
 
 
 
-  class MyPool2 extends JPanel {
+  class MyClock2 extends JPanel {
 	  //在這邊宣告 全區變數
 	  private  int yy,mm,ss, sss;
 	  //
@@ -45,7 +45,7 @@ public class homework8  extends JFrame{
 	  private Time  b;
 	  int x=150,y=150;
 	 
-	  MyPool2(){
+	  MyClock2(){
 		  setBackground(Color.BLACK);
 		  a=new Timer();
 		  b=new Time();
