@@ -18,7 +18,8 @@ public class MyPool2 extends JPanel{
 	private Timer timer;
 	private int viewW, viewH;
 	private int shipX, shipY;
-	LinkedList<Ball> balls;
+	private LinkedList<Ball> balls;
+	private boolean gameOver;
 	
 	public MyPool2(){
 		ship = new Ship(viewW, viewH);
@@ -27,25 +28,25 @@ public class MyPool2 extends JPanel{
 		timer.schedule(new ViewTask(),0, 30);
 		timer.schedule(new createBall(), 0 , 300);
 		timer.schedule(ship, 200, 100);
-		addMouseListener(new MyMouseAdapter());
+		gameOver = false;
+		addMouseMotionListener(new MyMouseAdapter());
 	}
 	private class MyMouseAdapter extends MouseAdapter{
 		@Override
 		public void mouseEntered(MouseEvent e) {
 			shipX = e.getX(); shipY = e.getY();
-			System.out.println(e.getX()+","+e.getY());
-			
-			
+			//System.out.println(e.getX()+","+e.getY());
 		}
 		@Override
 		public void mouseMoved(MouseEvent e) {
+			requestFocus();
 			shipX = e.getX(); shipY = e.getY();
-			System.out.println(e.getX()+","+e.getY());
+			//System.out.println(e.getX()+","+e.getY());
 		}
 		@Override
 		public void mouseExited(MouseEvent e) {
 			shipX = e.getX(); shipY = e.getY();
-			System.out.println(e.getX()+","+e.getY());
+			//System.out.println(e.getX()+","+e.getY());
 		}
 	}
 	
@@ -83,6 +84,10 @@ public class MyPool2 extends JPanel{
 		try{
 			for(Ball ball : balls){
 				g2d.fillOval(ball.x, ball.y, 10, 10);
+//				if(ball.x+5==shipX+10 || ball.x+5==shipX-10 || ball.x-5==ship+10 || ball.x-5==ship.x-10){
+//					gameOver = true;
+////					over();
+//				}
 			}
 		}catch(Exception ee){}
 	}
@@ -110,12 +115,26 @@ public class MyPool2 extends JPanel{
 		}
 		@Override
 		public void run() {
-			x = shipX;
-			y = shipY;
-			repaint();
+			if(gameOver == false){
+				x = shipX;
+				y = shipY;
+				for(Ball ball : balls){
+					if(ball.x+5==x+10 || ball.x+5==x-10 || ball.x-5==x+10 || ball.x-5==x-10||
+							ball.y+5==y+10 || ball.y+5==y-10 || ball.y-5==y+10 || ball.y-5==y-10){
+					gameOver = true;
+					}
+				}
+				
+				
+				repaint();
+			}
 		}
 		
 	}
+
+//	public void over() {
+//		
+//	}
 	
 	
 }
