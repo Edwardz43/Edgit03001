@@ -24,27 +24,16 @@ public class MyPool2 extends JPanel{
 		balls = new LinkedList<>();
 		timer = new Timer();
 		timer.schedule(new ViewTask(),0, 30);
-		timer.schedule(new createBall(), 0 , 300);
-		timer.schedule(ship, 200, 100);
+		timer.schedule(new createBall(), 0 , 100);
+		timer.schedule(ship, 200, 10);
 		isGameOver = false;
 		addMouseMotionListener(new MyMouseAdapter());
 	}
 	private class MyMouseAdapter extends MouseAdapter{
 		@Override
-		public void mouseEntered(MouseEvent e) {
-			ship.x = e.getX(); ship.y = e.getY();
-			//System.out.println(e.getX()+","+e.getY());
-		}
-		@Override
 		public void mouseMoved(MouseEvent e) {
 			requestFocus();
 			ship.x = e.getX(); ship.y = e.getY();
-			//System.out.println(e.getX()+","+e.getY());
-		}
-		@Override
-		public void mouseExited(MouseEvent e) {
-			ship.x = e.getX(); ship.y = e.getY();
-			//System.out.println(e.getX()+","+e.getY());
 		}
 	}
 	
@@ -52,10 +41,33 @@ public class MyPool2 extends JPanel{
 		@Override
 		public void run() {
 			if(isGameOver==false){
-				ball = new Ball((int)(Math.random()*viewW), (int)(Math.random()*viewH));
-				balls.add(ball);
-				timer.schedule(ball,1000, (int)(30 + Math.random()*70));
-				repaint();
+				int n = (int)(Math.random()*4);
+				switch(n){
+				case 1:
+					ball = new Ball((int)(Math.random()*viewW),0);
+					balls.add(ball);
+					timer.schedule(ball,1000, (int)(10 + Math.random()*70));
+					repaint();
+					break;
+				case 2:
+					ball = new Ball(0,(int)(Math.random()*viewH));
+					balls.add(ball);
+					timer.schedule(ball,1000, (int)(10 + Math.random()*70));
+					repaint();
+					break;
+				case 3:
+					ball = new Ball(viewW,(int)(Math.random()*viewH));
+					balls.add(ball);
+					timer.schedule(ball,1000, (int)(10 + Math.random()*70));
+					repaint();
+					break;
+				case 4:
+					ball = new Ball((int)(Math.random()*viewW),viewH);
+					balls.add(ball);
+					timer.schedule(ball,1000, (int)(10 + Math.random()*70));
+					repaint();
+					break;
+				}
 			}
 		}
 	}
@@ -86,10 +98,6 @@ public class MyPool2 extends JPanel{
 		try{
 			for(Ball ball : balls){
 				g2d.fillOval(ball.x, ball.y, 10, 10);
-//				if(ball.x+5==shipX+10 || ball.x+5==shipX-10 || ball.x-5==ship+10 || ball.x-5==ship.x-10){
-//					gameOver = true;
-////					over();
-//				}
 			}
 		}catch(Exception ee){}
 	}
@@ -98,8 +106,8 @@ public class MyPool2 extends JPanel{
 		int x, y, dx, dy;
 		Ball(int x, int y){
 			this.x = x; this.y = y; 
-			dx = (int)(10*Math.random()+1)*(Math.random()+0.5>1?1:-1); 
-			dy = (int)(10*Math.random()+1)*(Math.random()+0.5>1?1:-1);
+			dx = (x == ship.x )? 0 : (x > ship.x ? -10-(int)(Math.random()*10) : 10+(int)(Math.random()*10)); 
+			dy = (y == ship.y )? 0 : (y > ship.y ? -10-(int)(Math.random()*10) : 10+(int)(Math.random()*10));
 		}
 		@Override
 		
@@ -110,7 +118,6 @@ public class MyPool2 extends JPanel{
 				repaint();
 			}
 		}
-		
 	}
 	private class Ship extends TimerTask{
 		int x, y;
@@ -121,16 +128,18 @@ public class MyPool2 extends JPanel{
 		public void run() {
 			if(isGameOver == false){
 				for(Ball ball : balls){
-					if(ball.x+5==x+10 ){
-					isGameOver = true;
-					}
-				}				
+					if(ball.x+10==ship.x-20 && ball.y==ship.y){
+						isGameOver = true;
+					}else if(ball.x-10==ship.x+20 && ball.y==ship.y){
+						isGameOver = true;
+					}else if(ball.x==ship.x && ball.y+10==ship.y-20){
+						isGameOver = true;
+					}else if(ball.x==ship.x && ball.y-10==ship.y+20){
+						isGameOver = true;
+					} 
+				}
 				repaint();
 			}
-		}
-		
+		}	
 	}
-//	public void over() {
-//		
-//	}	
 }

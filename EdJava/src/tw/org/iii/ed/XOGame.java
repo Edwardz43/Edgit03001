@@ -153,22 +153,22 @@ public class XOGame extends JFrame{
 			for(int i=0; i<3; i++){
 				if(bt[i*3].check==2 && bt[i*3+1].check==2 && bt[i*3].check==bt[i*3+2].check){
 					isOver(2);
-					System.out.println("1a");
+					//System.out.println("1a");
 					return;
 				}else if(bt[i].check==2 && bt[i+3].check==2 && bt[i].check==bt[i+6].check){
 					isOver(2);
-					System.out.println("2a");
+					//System.out.println("2a");
 					return;
 				}	
 			}
 			if(bt[0].check == 2 && bt[4].check ==2 && bt[0].check==bt[8].check){
 				isOver(2);
-				System.out.println("3a");
+				//System.out.println("3a");
 				return;
 		
 			}else if(bt[2].check== 2 && bt[4].check ==2 && bt[2].check==bt[6].check){
 				isOver(2);
-				System.out.println("4a");
+				//System.out.println("4a");
 				return;
 			}
 		}
