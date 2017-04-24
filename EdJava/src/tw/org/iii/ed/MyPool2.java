@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -17,8 +16,8 @@ public class MyPool2 extends JPanel{
 	private Ship ship;
 	private Timer timer;
 	private int viewW, viewH;
-	private int shipX, shipY;
-	LinkedList<Ball> balls;
+	private LinkedList<Ball> balls;
+	private boolean isGameOver;
 	
 	public MyPool2(){
 		ship = new Ship(viewW, viewH);
@@ -27,42 +26,46 @@ public class MyPool2 extends JPanel{
 		timer.schedule(new ViewTask(),0, 30);
 		timer.schedule(new createBall(), 0 , 300);
 		timer.schedule(ship, 200, 100);
-		addMouseListener(new MyMouseAdapter());
+		isGameOver = false;
+		addMouseMotionListener(new MyMouseAdapter());
 	}
 	private class MyMouseAdapter extends MouseAdapter{
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			shipX = e.getX(); shipY = e.getY();
-			System.out.println(e.getX()+","+e.getY());
-			
-			
+			ship.x = e.getX(); ship.y = e.getY();
+			//System.out.println(e.getX()+","+e.getY());
 		}
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			shipX = e.getX(); shipY = e.getY();
-			System.out.println(e.getX()+","+e.getY());
+			requestFocus();
+			ship.x = e.getX(); ship.y = e.getY();
+			//System.out.println(e.getX()+","+e.getY());
 		}
 		@Override
 		public void mouseExited(MouseEvent e) {
-			shipX = e.getX(); shipY = e.getY();
-			System.out.println(e.getX()+","+e.getY());
+			ship.x = e.getX(); ship.y = e.getY();
+			//System.out.println(e.getX()+","+e.getY());
 		}
 	}
 	
 	private class createBall extends TimerTask{
 		@Override
 		public void run() {
-			ball = new Ball((int)(Math.random()*viewW), (int)(Math.random()*viewH));
-			balls.add(ball);
-			timer.schedule(ball,1000, (int)(30 + Math.random()*70));
-			repaint();
+			if(isGameOver==false){
+				ball = new Ball((int)(Math.random()*viewW), (int)(Math.random()*viewH));
+				balls.add(ball);
+				timer.schedule(ball,1000, (int)(30 + Math.random()*70));
+				repaint();
+			}
 		}
 	}
 	
 	private class ViewTask extends TimerTask{
 		@Override
 		public void run() {
-			repaint();
+			if(isGameOver==false){
+				repaint();
+			}
 		}
 	}
 	
@@ -76,13 +79,17 @@ public class MyPool2 extends JPanel{
 		g2d.fillRect(0, 0, viewW, viewH);
 		
 		g2d.setColor(Color.red);
-		g2d.fillOval(shipX, shipY, 20, 20);
+		g2d.fillOval(ship.x, ship.y, 20, 20);
 		
 		g2d.setColor(Color.yellow);
 		
 		try{
 			for(Ball ball : balls){
 				g2d.fillOval(ball.x, ball.y, 10, 10);
+//				if(ball.x+5==shipX+10 || ball.x+5==shipX-10 || ball.x-5==ship+10 || ball.x-5==ship.x-10){
+//					gameOver = true;
+////					over();
+//				}
 			}
 		}catch(Exception ee){}
 	}
@@ -97,9 +104,11 @@ public class MyPool2 extends JPanel{
 		@Override
 		
 		public void run() {
-			x += dx;
-			y += dy;
-			repaint();
+			if(isGameOver==false){
+				x += dx;
+				y += dy;
+				repaint();
+			}
 		}
 		
 	}
@@ -110,12 +119,18 @@ public class MyPool2 extends JPanel{
 		}
 		@Override
 		public void run() {
-			x = shipX;
-			y = shipY;
-			repaint();
+			if(isGameOver == false){
+				for(Ball ball : balls){
+					if(ball.x+5==x+10 ){
+					isGameOver = true;
+					}
+				}				
+				repaint();
+			}
 		}
 		
 	}
-	
-	
+//	public void over() {
+//		
+//	}	
 }
