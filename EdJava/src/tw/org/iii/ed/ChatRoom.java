@@ -46,6 +46,7 @@ public class ChatRoom extends JFrame{
 	private String ip;
 	private Color mycolor;
 	private int line;
+	private JLabel label;
 	
 	public ChatRoom (){
 		super("ChatRoom");
@@ -53,7 +54,7 @@ public class ChatRoom extends JFrame{
 		
 		//上面放一條label 好看的
 		top = new JPanel();
-		JLabel label = new JLabel("聊天程式 v1.0");
+		label = new JLabel("聊天程式 v1.0");
 		top.add(label);
 		
 		//中間的主角 聊天的內容
