@@ -104,8 +104,7 @@ public class ChatRoom extends JFrame{
 				changeColor();
 			}
 		});
-		
-		
+				
 		bottom.add(tf);bottom.add(input);bottom.add(connect);bottom.add(changeColor);
 		
 		add(top, BorderLayout.NORTH);
@@ -127,6 +126,16 @@ public class ChatRoom extends JFrame{
 	}
 	protected void changeColor() {
 		mycolor = new JColorChooser().showDialog(this, "選擇顏色", Color.black);
+		if(mycolor == Color.WHITE || mycolor == Color.white){
+			changeColor.setBackground(mycolor);
+			changeColor.setForeground(Color.BLACK);
+		}else if(mycolor == Color.BLACK || mycolor == Color.black){
+			changeColor.setBackground(mycolor);
+			changeColor.setForeground(Color.WHITE);
+		}else{
+			changeColor.setForeground(Color.BLACK);
+			changeColor.setBackground(mycolor);
+		}
 	}
 	private void connect() {
 		try {
