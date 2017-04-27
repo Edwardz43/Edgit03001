@@ -76,17 +76,6 @@ public class MyPool2 extends JPanel{
 		@Override
 		public void run() {
 			if(isGameOver==false){
-				for(Ball ball : balls){
-					if(ball.x+10==ship.x && ball.y==ship.y){
-						isGameOver = true;
-					}else if(ball.x-10==ship.x && ball.y==ship.y){
-						isGameOver = true;
-					}else if(ball.x==ship.x && ball.y+10==ship.y){
-						isGameOver = true;
-					}else if(ball.x==ship.x && ball.y-10==ship.y){
-						isGameOver = true;
-					} 
-				}
 				repaint();
 			}
 		}
@@ -132,6 +121,10 @@ public class MyPool2 extends JPanel{
 				while(x >-20 && x < viewW+20 && y >= 0-20 && y < viewH+20){
 					x += dx;
 					y += dy;
+					
+					if(x+10 <= ship.x  && x - 10 >= ship.x && y +10 <= ship.y && y -10 >= ship.y ){
+						isGameOver = true;		 
+					}
 					try {
 						Thread.sleep(60);
 					} catch (InterruptedException e) {}
