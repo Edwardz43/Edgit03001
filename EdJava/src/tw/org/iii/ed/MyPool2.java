@@ -28,7 +28,7 @@ public class MyPool2 extends JPanel{
 		balls = new LinkedList<>();
 		timer = new Timer();
 		timer.schedule(new ViewTask(),0, 30);
-		timer.schedule(new createBall(), 0 , 60);
+		timer.schedule(new createBall(), 0 , 80);
 		timer.schedule(ship, 200, 10);
 		isGameOver = false;
 		addMouseMotionListener(new MyMouseAdapter());
@@ -122,8 +122,8 @@ public class MyPool2 extends JPanel{
 		int x, y, dx, dy;
 		Ball(int x, int y){
 			this.x = x; this.y = y; 
-			dx = (x == ship.x )? 0 : (x > ship.x ? -20-(int)(Math.random()*10) : 20+(int)(Math.random()*10)); 
-			dy = (y == ship.y )? 0 : (y > ship.y ? -20-(int)(Math.random()*10) : 20+(int)(Math.random()*10));
+			dx = (x == ship.x )? 0 : (x > ship.x ? -5-(int)(Math.random()*5) : 5+(int)(Math.random()*5)); 
+			dy = (y == ship.y )? 0 : (y > ship.y ? -5-(int)(Math.random()*5) : 5+(int)(Math.random()*5));
 		}
 		@Override
 		
@@ -133,7 +133,7 @@ public class MyPool2 extends JPanel{
 					x += dx;
 					y += dy;
 					try {
-						Thread.sleep(40);
+						Thread.sleep(60);
 					} catch (InterruptedException e) {}
 					repaint();
 				}

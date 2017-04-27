@@ -70,7 +70,7 @@ public class MyPool3 extends JPanel{
 	private class Ship extends TimerTask{
 		int x, y, dx, dy;
 		Ship(int x, int y){
-			this.x = x; this.y = y; dx = dy = 3;
+			this.x = x; this.y = y; dx = dy = (int)(Math.random()*3+5);
 		}
 		@Override
 		public void run() {
