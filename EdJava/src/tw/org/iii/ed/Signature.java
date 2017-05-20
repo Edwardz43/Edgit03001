@@ -31,7 +31,7 @@ import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
 public class Signature extends JFrame{
-	private JButton clear, undo, redo, color, stroke, BGC, save, open, export;
+	private JButton clear, undo, redo, color, stroke, BGC, save, open, export, capture;
 	private MySign msp;
 	
 	public Signature(){
@@ -40,11 +40,12 @@ public class Signature extends JFrame{
 		
 		clear= new JButton("清空");undo= new JButton("undo");redo= new JButton("redo");stroke= new JButton("粗細");
 		color =  new JButton("顏色");BGC= new JButton("背景顏色");save= new JButton("儲存");open= new JButton("開啟檔案");export= new JButton("輸出圖檔");
+		capture = new JButton("截圖");
 		
 		JPanel top = new JPanel(new FlowLayout());
 		JPanel bottom = new JPanel(new FlowLayout());
 		
-		top.add(save);top.add(open);top.add(export);
+		top.add(save);top.add(open);top.add(export);top.add(capture);
 		bottom.add(clear);bottom.add(undo);bottom.add(redo);bottom.add(BGC);bottom.add(color);bottom.add(stroke);
 		
 		add(top, BorderLayout.NORTH); 
@@ -120,17 +121,27 @@ public class Signature extends JFrame{
 			}
 		});
 		
+		capture.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				msp.setCap();
+			}
+		});
+		
+		
 		setSize(800, 600);
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
+	
 	public static void main(String[] args) {
 		new Signature();
 	}
 }
+
 class MySign extends JPanel{
 	private LinkedList<LinkedList<HashMap<String, Integer>>> lines, recycle;
-	
+	private boolean isCapture;
 	//每條線都有顏色與筆畫粗細  所以用HashMap存放很適合 
 	//要把線依序編號 方便之後repaint  所以外面再加一層LinkedList
 	//修正bug:新增colorRecycle strokeRecycle 避免在undo redo clear時 line與color stroke不同步的錯誤
@@ -159,7 +170,8 @@ class MySign extends JPanel{
 		
 		//拿來存簽名檔的  可序列化  方便存取
 		sign = new ArrayList();
-
+		
+		isCapture = false;
 		//在這邊先暫定 背景淺灰色  筆畫黑色  粗細5
 		setBackground(Color.lightGray);
 		myColor =  Color.BLACK;
@@ -174,25 +186,31 @@ class MySign extends JPanel{
 		Graphics2D g2d = (Graphics2D)g;
 		
 		//很重要 因為要決定每條線的粗細與顏色  需要每條線的編號(index)
-		//所以不用foreach 改用傳統的for 
-		for(int j=0; j<lines.size(); j++){
-			//叫出線的顏色
-			HashMap<String, Color> cOl0 = color.get(j);
-			g2d.setColor(myColor= cOl0.get("color"));
-			
-			//叫出粗細
-			HashMap<String, Integer> sOl0 = stroke.get(j);
-			g2d.setStroke(new BasicStroke(myStroke = sOl0.get("stroke")));
-			
-			//畫線
-			LinkedList<HashMap<String, Integer>> line = lines.get(j);
-			//System.out.println(myColor); 
-			//測試用的
-			for(int i = 1 ; i<line.size(); i++){
-				HashMap<String, Integer> p0 = line.get(i-1);
-				HashMap<String, Integer> p1 = line.get(i);
-				g2d.drawLine(p0.get("x"), p0.get("y"), p1.get("x"), p1.get("y"));
+		//所以不用foreach 改用傳統的for
+		if(!isCapture){
+			for(int j=0; j<lines.size(); j++){
+				//叫出線的顏色
+				HashMap<String, Color> cOl0 = color.get(j);
+				g2d.setColor(myColor= cOl0.get("color"));
+				
+				//叫出粗細
+				HashMap<String, Integer> sOl0 = stroke.get(j);
+				g2d.setStroke(new BasicStroke(myStroke = sOl0.get("stroke")));
+				
+				//畫線
+				LinkedList<HashMap<String, Integer>> line = lines.get(j);
+				//System.out.println(myColor); 
+				//測試用的
+				for(int i = 1 ; i<line.size(); i++){
+					HashMap<String, Integer> p0 = line.get(i-1);
+					HashMap<String, Integer> p1 = line.get(i);
+					g2d.drawLine(p0.get("x"), p0.get("y"), p1.get("x"), p1.get("y"));
+				}
 			}
+		}else{
+			
+			
+			
 		}
 				
 	}
@@ -306,42 +324,55 @@ class MySign extends JPanel{
 		}		
 	}
 	
+	//
+	public void setCap(){
+		this.isCapture = true;
+	} 
+	
 	//很重要的來了  因為線的粗細跟顏色  是在你滑鼠按下的那一刻就決定了 
 	//所以我們在這邊記錄它的顏色根粗細
 	private class MyMouseListener extends MouseAdapter{
 		@Override
 		public void mousePressed(MouseEvent e) {
-			super.mousePressed(e);
+			if(!isCapture){
+				super.mousePressed(e);
+				
+				recycle.clear();
+				LinkedList<HashMap<String, Integer>> line = new LinkedList<>();
+				
+				HashMap<String, Integer> point = new HashMap<>();
+				point.put("x", e.getX());
+				point.put("y", e.getY());
+				line.add(point);
 			
-			recycle.clear();
-			LinkedList<HashMap<String, Integer>> line = new LinkedList<>();
-			
-			HashMap<String, Integer> point = new HashMap<>();
-			point.put("x", e.getX());
-			point.put("y", e.getY());
-			line.add(point);
-		
-			lines.add(line);
-			
-			//紀錄線的顏色
-			HashMap<String, Color> colorOfLine = new HashMap<>();
-			colorOfLine.put("color", myColor);
-			color.add(colorOfLine);
-			
-			//紀錄線的粗細
-			HashMap<String, Integer> strokeOfLine = new HashMap<>();
-			strokeOfLine.put("stroke", myStroke);
-			stroke.add(strokeOfLine);
+				lines.add(line);
+				
+				//紀錄線的顏色
+				HashMap<String, Color> colorOfLine = new HashMap<>();
+				colorOfLine.put("color", myColor);
+				color.add(colorOfLine);
+				
+				//紀錄線的粗細
+				HashMap<String, Integer> strokeOfLine = new HashMap<>();
+				strokeOfLine.put("stroke", myStroke);
+				stroke.add(strokeOfLine);
+			}else{
+				
+			}
 		}
 		
 		@Override
 		public void mouseDragged(MouseEvent e) {
-			super.mouseDragged(e);
-			HashMap<String, Integer> point = new HashMap<>();
-			point.put("x", e.getX());
-			point.put("y", e.getY());
-			lines.getLast().add(point);
-			repaint();
+			if(!isCapture){
+				super.mouseDragged(e);
+				HashMap<String, Integer> point = new HashMap<>();
+				point.put("x", e.getX());
+				point.put("y", e.getY());
+				lines.getLast().add(point);
+				repaint();
+			}else{
+				
+			}
 		}
 	}	
 }
