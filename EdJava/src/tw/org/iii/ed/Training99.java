@@ -33,7 +33,6 @@ public class Training99 extends JPanel{
 		
 		menuBar = new JPanel();
 		menuBar.setLayout(new FlowLayout());
-		
 		start = new JButton("開始遊戲");
 		menuBar.add(start,FlowLayout.LEFT);
 		start.addActionListener(new ActionListener() {

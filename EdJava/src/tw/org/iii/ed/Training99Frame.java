@@ -7,17 +7,12 @@ import javax.swing.JFrame;
 public class Training99Frame extends JFrame{
 	//private MyClock myclock;
 //	private MyPool mypool;
-	private MyPool2 mypool;
+//	private Training99 t99;
 //	private MyPool3 mypool;
 	Training99Frame(){
 		setLayout(new BorderLayout());
-		
-		//MyClock myclock = new MyClock();
-		//add(myclock, BorderLayout.NORTH);
-//		MyPool mypool = new MyPool();
-		MyPool2 mypool = new MyPool2();
-//		MyPool3 mypool = new MyPool3();
-		add(mypool, BorderLayout.CENTER);
+		Training99 t99 = new Training99();
+		add(t99, BorderLayout.CENTER);
 		setSize(800,  600);
 		setVisible(true);
 		setDefaultCloseOperation(3);
