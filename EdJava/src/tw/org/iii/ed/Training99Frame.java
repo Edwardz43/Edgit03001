@@ -15,6 +15,7 @@ public class Training99Frame extends JFrame{
 		add(t99, BorderLayout.CENTER);
 		setSize(800,  600);
 		setVisible(true);
+		setLocation(getWidth()/4, getHeight()/5);
 		setDefaultCloseOperation(3);
 	}
 	
