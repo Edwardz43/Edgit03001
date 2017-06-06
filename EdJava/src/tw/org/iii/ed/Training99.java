@@ -133,6 +133,8 @@ public class Training99 extends JPanel{
 		Graphics2D g2d= (Graphics2D)g;
 		g2d.clearRect(0, 0, viewW, viewH);
 		if(gameStage == 0){
+			g2d.setColor(Color.BLACK);
+			g2d.fillRect(0, 0, viewW, viewH);
 			String Title = "特訓久久";
 			g2d.setColor(Color.red);
 			g2d.setFont(new Font(null,Font.CENTER_BASELINE, 50));
@@ -154,6 +156,8 @@ public class Training99 extends JPanel{
 		}
 		
 		if(gameStage == 2){
+			g2d.setColor(Color.BLACK);
+			g2d.fillRect(0, 0, viewW, viewH);
 			g2d.setColor(Color.red);
 			g2d.setFont(new Font(null,Font.CENTER_BASELINE, 30));
 			g2d.drawString("Game Over !", viewW/2-100,viewH/2);

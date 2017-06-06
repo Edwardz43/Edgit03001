@@ -3,16 +3,16 @@ package tw.org.iii.ed;
 import javax.swing.JOptionPane;
 
 public class ReverseNumber {  
-	static Long getReverse(Long n){
-		Long result =n%10;
-		Long x = n/10;
+	static Long getReverse(Long x){
+		Long result =x%10;
+		Long res = x/10;
 		do{
-			result = result*10 + x%10;
-			x = x/10;
-			if(result - n < Integer.MIN_VALUE|| result- n > Integer.MAX_VALUE){
+			result = result*10 + res%10;
+			res = res/10;
+			if(result - x < Integer.MIN_VALUE|| result- x > Integer.MAX_VALUE){
 				return 0l;
 			}
-		}while(x !=0);
+		}while(res !=0);
 		return result;
 	}
 
