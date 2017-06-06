@@ -26,7 +26,6 @@ public class XOGame extends JFrame{
 		super("XO Game");
 		
 		setLayout(new BorderLayout());
-		
 		//遊戲區 放井字9宮格
 		gameZone = new JPanel();
 		gameZone.setLayout(new GridLayout(3, 3));
@@ -75,6 +74,7 @@ public class XOGame extends JFrame{
 		
 		setSize(450, 500);
 		setVisible(true);
+
 		setDefaultCloseOperation(3);
 	}
 	
