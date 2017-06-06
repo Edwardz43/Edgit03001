@@ -74,7 +74,7 @@ public class XOGame extends JFrame{
 		
 		setSize(450, 500);
 		setVisible(true);
-
+        setLocation(getWidth()/2, getHeight()/2);
 		setDefaultCloseOperation(3);
 	}
 	
