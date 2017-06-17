@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+
 /*3/27
  * 陽春版的檔案總管 
  * 有開啟文字檔  儲存檔案 離開 三種基本功能
