@@ -1,9 +1,9 @@
 package tw.org.iii.ed;
 
 public class TEST {
-
-	public static void main(String[] args) {
-		new XOGame();
+	
+	public static void main(String[] args) {	
+	
 	}
 }
 
