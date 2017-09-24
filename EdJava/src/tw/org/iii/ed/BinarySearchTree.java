@@ -94,6 +94,10 @@ public class BinarySearchTree {
 			printPostOrder(p.right);	
 		System.out.print(p.key + " ");
 	}
+	
+	public int getRoot() {
+		return this.root.getKey();
+	}
 }
 
 class Node{
@@ -103,5 +107,9 @@ class Node{
 	public Node(int key) {
 		this.key = key;
 		this.left = this.right = null;
+	}
+	
+	public int getKey() {
+		return this.key;
 	}
 }
