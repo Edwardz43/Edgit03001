@@ -24,7 +24,7 @@ public class FindAllDuplicatesinanArray {
         	   check[nums[i] - 1] = true;
            }
         }
-        System.out.println(System.currentTimeMillis() - startTime);
+        System.out.println("time : "+(System.currentTimeMillis() - startTime));
         return res;
     }
 }
