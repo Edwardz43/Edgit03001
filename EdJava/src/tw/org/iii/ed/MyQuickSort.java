@@ -12,7 +12,9 @@ public class MyQuickSort {
 		for(int i : array) {
 			list.add(i);	
 		}
+		long start = System.currentTimeMillis();
 		list = sort(list);
+		System.out.println("QS : "+(System.currentTimeMillis() - start));
 		for(int i = 0; i < array.length;++i) {
 			array[i] = list.get(i);
 		}

@@ -25,6 +25,8 @@ public class MS950toUTF8 {
 			bw.flush();
 			bw.close();
 			//System.out.println(sb.toString());
-		} catch (Exception e) {e.toString();}
+		} catch (Exception e) {
+			e.printStackTrace();
+			e.toString();}
 	}
 }

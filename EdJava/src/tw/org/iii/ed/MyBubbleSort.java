@@ -13,8 +13,8 @@ public class MyBubbleSort {
 				}
 			}
 		}
-		System.out.println(System.currentTimeMillis() - start);
-		printNum(array);
+		System.out.println("BS : "+(System.currentTimeMillis() - start));
+		//printNum(array);
 	}
 
 	private static void swapNum(int i, int k, int[] array) {
