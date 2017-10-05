@@ -7,8 +7,8 @@ package tw.org.iii.ed;
 public  class Calendar_v4 {  
 	public static void main(String[] args){
 		myCalendar c1 = new yearCalendar(2017);
-		myCalendar c2 = new monthCalendar(2017,3);
-		myCalendar c3 = new dayCalendar(2017,3,21);
+		myCalendar c2 = new monthCalendar(2017,9);
+		myCalendar c3 = new dayCalendar(2017,9,25);
 		c2.printCalendar();		
 	}
 }
